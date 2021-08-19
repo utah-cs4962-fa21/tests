@@ -56,8 +56,13 @@ To test it, we use the `test.socket` object, which mocks the HTTP server:
 Then we request the URL and test both request and response:
 
     >>> headers, body = web_browser.request(url)
-    >>> test.socket.last_request(url)
-    b'GET /example1 HTTP/1.0\r\nHost: test.test\r\n\r\n'
+    >>> lr = test.socket.last_request(url)
+    >>> b'GET /example1 HTTP/1.0\r\n' in lr or b'GET /example1 HTTP/1.1\r\n' in lr
+    True
+    >>> b'Host: test.test\r\n' in lr
+    True
+    >>> lr.endswith(b'\r\n\r\n')
+    True
     >>> body
     'Body text'
     >>> headers
@@ -87,3 +92,105 @@ Requesting the wrong port is an error:
     >>> test.errors(web_browser.request, "http://test.test:401/example3")
     True
 
+
+Testing Exercise `HTTP/1.1`
+---------------------------
+
+Reuse the response from earlier
+    
+    >>> b'Connection: close' in lr
+    True
+    >>> b'User-Agent: ' in lr
+    True
+    >>> b'GET /example1 HTTP/1.1\r\n' in lr
+    True
+    
+Make a new request with an extra header
+
+    >>> headers, body = web_browser.request(url, headers={"ClientHeader": "42"})
+    >>> lr = test.socket.last_request(url)
+    >>> b'ClientHeader: 42' in lr
+    True
+
+
+Testing Exercise `Redirects`
+----------------------------
+
+Test a simple redirect with a full path
+
+    >>> url = 'http://test.test/redirect1'
+    >>> redirect_target1 = 'http://test.redirect_test/target1'
+    >>> test.socket.respond(url, b"HTTP/1.0 301 Moved Permanently\r\n" +
+    ... "Location: {}\r\n\r\n".format(redirect_target1).encode())
+    >>> test.socket.respond(redirect_target1, b"HTTP/1.0 200 Ok\r\n\r\n" +
+    ... b"You found me")
+    >>> headers, body = web_browser.request(url)
+    >>> body
+    'You found me'
+    
+Now a simple redirect without an explicit host
+
+    >>> url = 'http://test.test/redirect2'
+    >>> redirect_target2 = 'http://test.test/target2'
+    >>> test.socket.respond(url, b"HTTP/1.0 301 Moved Permanently\r\n" +
+    ... b"Location: /target2\r\n\r\n")
+    >>> test.socket.respond(redirect_target2, b"HTTP/1.0 200 Ok\r\n\r\n" +
+    ... b"You found me again")
+    >>> headers, body = web_browser.request(url)
+    >>> body
+    'You found me again'
+    
+Now a multiple redirect
+
+    >>> url = 'http://test.test/redirect3'
+    >>> redirect_target3 = 'http://test.test/target3'
+    >>> redirect_target4 = 'http://test.redirect_test/target4'
+    >>> test.socket.respond(url, b"HTTP/1.0 301 Moved Permanently\r\n" +
+    ... "Location: {}\r\n\r\n".format(redirect_target3).encode())
+    >>> test.socket.respond(redirect_target3, b"HTTP/1.0 301 Moved Permanently\r\n" +
+    ... "Location: {}\r\n\r\n".format(redirect_target4).encode())
+    >>> test.socket.respond(redirect_target4, b"HTTP/1.0 200 Ok\r\n\r\n" +
+    ... b"I need to hide better")    
+    >>> headers, body = web_browser.request(url)
+    >>> body
+    'I need to hide better'
+    
+A self redirect loop should lead to an error
+
+    >>> url = 'http://test.test/redirect4'
+    >>> test.socket.respond(url, b"HTTP/1.0 301 Moved Permanently\r\n" +
+    ... "Location: {}\r\n\r\n".format(url).encode())
+    >>> try:
+    ...     header, body = web_browser.request(url)
+    ... except AssertionError:
+    ...     print("Loop caught")
+    Loop caught
+
+A two stage loop to make sure infinite redirects aren't just caught by
+looking for a direct self loop
+
+    >>> url = 'http://test.test/redirect5'
+    >>> redirect_target5 = 'http://test.test/target5'
+    >>> test.socket.respond(url, b"HTTP/1.0 301 Moved Permanently\r\n" +
+    ... "Location: {}\r\n\r\n".format(redirect_target5).encode())
+    >>> test.socket.respond(redirect_target5, b"HTTP/1.0 301 Moved Permanently\r\n" +
+    ... "Location: {}\r\n\r\n".format(url).encode())
+    >>> try:
+    ...     header, body = web_browser.request(url)
+    ... except AssertionError:
+    ...     print("Loop caught")
+    Loop caught
+
+A non 3XX status code with a location header to test that the status code is 
+being checked, not just the location header
+
+    >>> url = 'http://test.test/not_redirect'
+    >>> do_not_follow = 'http://test.test/not_target'
+    >>> test.socket.respond(url, b"HTTP/1.0 500 Internal Server Error\r\n" +
+    ... "Location: {}\r\n\r\n".format(do_not_follow).encode() +
+    ... b"Stay here")
+    >>> test.socket.respond(do_not_follow, b"HTTP/1.0 200 Ok\r\n\r\n" +
+    ... b"Too far")
+    >>> header, body = web_browser.request(url)
+    >>> body
+    'Stay here'
