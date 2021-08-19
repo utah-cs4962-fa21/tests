@@ -7,6 +7,7 @@ to the screen. This file contains tests for those components.
 
 Here's the testing boilerplate.
 
+    >>> import time
     >>> import test
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
@@ -194,3 +195,76 @@ being checked, not just the location header
     >>> header, body = web_browser.request(url)
     >>> body
     'Stay here'
+
+
+Testing Exercise `Caching`
+----------------------------
+
+Test that a respsone is cached by changing the response
+
+    >>> url = "http://test.test/cache_me1"
+    >>> test.socket.respond(url, b"HTTP/1.0 200 Ok\r\n" +
+    ... b"Cache-Control: max-age=9001\r\n\r\n" +
+    ... b"Keep this for a while")
+    >>> header, body = web_browser.request(url)
+    >>> test.socket.respond(url, b"HTTP/1.0 200 Ok\r\n" +
+    ... b"Cache-Control: max-age=9001\r\n\r\n" +
+    ... b"Don't even ask for this")
+    >>> header, body = web_browser.request(url)
+    >>> body
+    'Keep this for a while'
+
+Make sure not everything is cached
+
+    >>> url = "http://test.test/do_not_cache_me"
+    >>> test.socket.respond(url, b"HTTP/1.0 200 Ok\r\n" +
+    ... b"Cache-Control: no-store\r\n\r\n" +
+    ... b"Don't cache me")
+    >>> header, body = web_browser.request(url)
+    >>> test.socket.respond(url, b"HTTP/1.0 200 Ok\r\n" +
+    ... b"Cache-Control: no-store\r\n\r\n" +
+    ... b"Ask for this")
+    >>> header, body = web_browser.request(url)
+    >>> body
+    'Ask for this'
+    
+The cache should hold more than one thing
+
+    >>> url = "http://test.test/cache_me2"
+    >>> test.socket.respond(url, b"HTTP/1.0 200 Ok\r\n" +
+    ... b"Cache-Control: max-age=9001\r\n\r\n" +
+    ... b"Keep this for a while, also")
+    >>> header, body = web_browser.request(url)
+    >>> test.socket.respond(url, b"HTTP/1.0 200 Ok\r\n" +
+    ... b"Cache-Control: max-age=9001\r\n\r\n" +
+    ... b"Don't even ask for this")
+    >>> header, body = web_browser.request(url)
+    >>> body
+    'Keep this for a while, also'
+    >>> header, body = web_browser.request("http://test.test/cache_me1")
+    >>> body
+    'Keep this for a while'
+    
+A cache entry can be invalidated by time elapsing
+
+    >>> url = "http://test.test/cache_me3"
+    >>> test.socket.respond(url, b"HTTP/1.0 200 Ok\r\n" +
+    ... b"Cache-Control: max-age=1\r\n\r\n" +
+    ... b"Keep this for a short while")
+    >>> header, body = web_browser.request(url)
+    >>> test.socket.respond(url, b"HTTP/1.0 200 Ok\r\n" +
+    ... b"Cache-Control: max-age=9001\r\n\r\n" +
+    ... b"Don't ask for this immediately")
+    >>> header, body = web_browser.request(url)
+    >>> body
+    'Keep this for a short while'
+    >>> time.sleep(2)
+    >>> header, body = web_browser.request(url)
+    >>> body
+    "Don't ask for this immediately"
+
+The other entries should reamin
+
+    >>> header, body = web_browser.request("http://test.test/cache_me1")
+    >>> body
+    'Keep this for a while'
