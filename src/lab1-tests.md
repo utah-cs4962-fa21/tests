@@ -12,7 +12,6 @@ Here's the testing boilerplate.
     >>> _ = test.ssl.patch().start()
     >>> import web_browser
     
-You can run this file with `doctest` to run the tests.
 
 Testing `show`
 --------------
@@ -22,19 +21,25 @@ skip the tags inside.
 
     >>> web_browser.show('<body>hello</body>')
     hello
-    >>> web_browser.show('he<body>llo</body>')
+    >>> web_browser.show('<body><wbr>hello</body>')
     hello
-    >>> web_browser.show('he<body>l</body>lo')
+    >>> web_browser.show('<body>he<wbr>llo</body>')
     hello
-    >>> web_browser.show('he<body>l<div>l</div>o</body>')
+    >>> web_browser.show('<body>hel<div>l</div>o</body>')
     hello
 
 Note that the tags do not have to match:
 
-    >>> web_browser.show('he<body>l</div>lo')
+    >>> web_browser.show('<body><p>hel</div>lo</body>')
     hello
-    >>> web_browser.show('he<body>l<div>l</body>o</div>')
+    >>> web_browser.show('<body>h<p>el<div>l</p>o</div></body>')
     hello
+    
+Newlines should not be removed:
+
+    >>> web_browser.show('<body>hello\nworld</body>')
+    hello
+    world
 
 Testing `request`
 -----------------
