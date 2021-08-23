@@ -1,9 +1,47 @@
 # Tests for CS 4962 exercises
 
-There should be no need for the students to clone/download this respository.
-It will automatically be used by the github Action script created for each
-    student.
+These tests will automatically be used by the github Action script 
+    created for each student.
 The markdown files in this repository contain the tests for each chapter's
     working state as well as tests for the assigned exercises.
-It may be usefull to read throught the test file for each chapter before 
+It may be useful to read through the test file for each chapter before 
     implementing the web browser.
+Note that this repository will be updated throughout the semester to 
+   contain tests for each chapter.
+
+## Running the tests
+
+To run the tests on your own simply run the 'src/run-tests.py' file from the
+    root directory of your web browser git.
+The script will pick up the 'web-browser.py' file from the directory in
+    which it is ran.
+The output of the script is [doctest](https://docs.python.org/3/library/doctest.html) 
+    output for each markdown file for the current chapter followed by a 
+    summary of which files contain failed tests.
+
+### Example output
+    Summarised results
+
+                      chapter1-base-tests.md: passed
+         chapter1-exercise-http-1-1-tests.md: passed
+        chapter1-exercise-file-urls-tests.md: passed
+        chapter1-exercise-redirects-tests.md: passed
+          chapter1-exercise-caching-tests.md: passed
+    ----------------------------------------------------
+                                   Final: all passed
+
+## Mocked modules and methods
+
+To facilitate testing, certain methods in standard modules have been overwritten
+ in the testing framework.
+These are the methods which have been mocked.
+ 
+From the `socket`:
+- `connect`
+- `send`
+- `makefile`
+- `close`
+
+From `ssl`:
+- `wrap_socket`
+

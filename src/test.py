@@ -8,7 +8,11 @@ import sys
 import tkinter
 import tkinter.font
 import unittest
+import email
 from unittest import mock
+
+
+
 
 class socket:
     URLs = {}
@@ -65,6 +69,23 @@ class socket:
     def last_request(cls, url):
         return cls.Requests[url][-1]
 
+    @classmethod
+    def parse_last_request(cls, url):
+        raw_request = cls.Requests[url][-1].decode()
+        raw_command, raw_headers = raw_request.split('\r\n', 1)
+        message = email.message_from_file(io.StringIO(raw_headers))
+        headers = dict(message.items())
+        headers = {key.lower(): val for key,val in headers.items()}
+        command, path, version = raw_command.split(" ", 2)
+        return command, path, version, headers
+
+    @classmethod
+    def redirect_url(cls, from_url, to_url):
+        cls.respond(url=from_url,
+                    response=("HTTP/1.0 301 Moved Permanently\r\n" +
+                              "Location: {}\r\n" +
+                              "\r\n").format(to_url).encode(),
+                    method="GET")
 class ssl:
     def wrap_socket(self, s, server_hostname):
         assert s.host == server_hostname
