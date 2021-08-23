@@ -27,5 +27,5 @@ Here we make a file, put some text in it, and make a file scheme request.
     
 Requesting a nonexistent file should result in error.
 
-    >>> test.errors(browser.request, "/this/file/does/not/exist")
+    >>> test.errors(browser.request, "file:///this/file/does/not/exist")
     True
