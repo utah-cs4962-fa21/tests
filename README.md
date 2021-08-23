@@ -61,6 +61,7 @@ For the tests to work, it's important only to use mocked methods.
 Specifically, here are the mocked methods in various modules:
 
 | Library | Methods |
+| ------- | ------- |
 | `socket` | The `socket` class and its methods `connect`, `send`, `makefile`, `close` |
 | `ssl` | The `wrap_socket` method |
 
