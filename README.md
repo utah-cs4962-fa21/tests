@@ -1,28 +1,27 @@
 # Tests for CS 4962 exercises
 
-These tests will automatically be used by the github Action script 
-    created for each student.
-The markdown files in this repository contain the tests for each chapter's
-    working state as well as tests for the assigned exercises.
-It may be useful to read through the test file for each chapter before 
-    implementing the web browser.
-Note that this repository will be updated throughout the semester to 
-   contain tests for each chapter.
+The markdown files in this repository contain tests for your web browser.
+For example, the file `chapter1-base-tests.md` contains basic unit tests
+    for your browser at the end of Chapter 1,
+    while `chapter1-exercise-caching-tests.md` contains tests
+    for the "Caching" exercise.
+You'll be graded on passing both the `base` and `exercise` tests.
+
+Read through the test files for each chapter before working on the web
+    browser.
+The test files contain additional information about how you should
+    implement each exercise and how it will be tested.
+Note that this repository will be updated throughout the semester with 
+   new tests for each chapter.
 
 ## Running the tests
 
-To run the tests on your own simply run the __src/run-tests.py__ file from the
-    root directory of your web browser git.
-The script will pick up the __browser.py__ file from the directory in
-    which it is ran.
-With no arguments this script will test the coming week's homework, but optionally an 
-    argument is used to specify a chapter's tests to run such as __chapter1__ to specify
-    the tests for the first chapter or __all__ to specify all tests available.
-The output of the script is [doctest](https://docs.python.org/3/library/doctest.html) 
-    output for each markdown file for the current chapter followed by a 
-    summary of which files contain failed tests.
+You do not need to run these tests manually.
+They will be automatically run by Github Actions in your repository student.
+The output should look like this:
 
-### Example output
+    $ python3 src/run-tests.py
+    
     Summarised results
 
                       chapter1-base-tests.md: passed
@@ -33,20 +32,37 @@ The output of the script is [doctest](https://docs.python.org/3/library/doctest.
     ----------------------------------------------------
                                    Final: all passed
 
+If any tests fail, you will probably also get an email from Github.
+
+To run the tests manually,
+    go to the root directory of your web browser
+    run `python3 src/run-tests.py` with no arguments.
+The script will look for the `browser.py` file in that directory
+    and run all of the tests on that file.
+
+With no arguments this script will test the coming week's homework,
+    but you can also specify an 
+    argument to select a specific chapter's tests.
+For example, run `python3 src/run-tests.py chapter1`
+    to run the tests for the first chapter.
+You can use the argument `all` to run all available tests.
+The output of the script is [doctest](https://docs.python.org/3/library/doctest.html) 
+    output for each markdown file for the current chapter followed by a 
+    summary of which files contain failed tests.
+
 ## Mocked modules and methods
 
-To facilitate testing, certain methods in standard modules have been overwritten
- in the testing framework.
-These are the methods which have been mocked.
-Using methods in these classes which have not been mocked may lead to incompatability
-  with this test harness.
- 
-From the `socket`:
-- `connect`
-- `send`
-- `makefile`
-- `close`
+Our test framework _mocks_ certain methods in the standard library,
+    meaning it overwrites them for testing purposes.
+For example, `socket.socket` no longer creates a real OS socket;
+    instead, it creates a mock socket that does not actually make
+    connections over the network.
+For the tests to work, it's important only to use mocked methods.
+Specifically, here are the mocked methods in various modules:
 
-From `ssl`:
-- `wrap_socket`
+| Library | Methods |
+| `socket` | The `socket` class and its methods `connect`, `send`, `makefile`, `close` |
+| `ssl` | The `wrap_socket` method |
 
+This table will be updated throughout the semester
+    as we test more parts of your browser.
