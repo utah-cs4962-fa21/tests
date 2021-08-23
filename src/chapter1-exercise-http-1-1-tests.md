@@ -20,8 +20,8 @@ Mock the HTTP server, as before:
     ...   method="GET")
 
 This request/response pair was tested in the base tests, but now we are 
-  checking that the 'connection' header is present and contains 'close', that a
-  'user-agent' header is present, and that the request is HTTP 1.1:
+  checking that the __Connection__ header is present and contains __close__, that a
+  __User-Agent__ header is present, and that the request is HTTP 1.1:
 
     >>> response_headers, response_body = web_browser.request(url)
     >>> command, path, version, headers = test.socket.parse_last_request(url)

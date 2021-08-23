@@ -53,8 +53,7 @@ To test it, we use the `test.socket` object, which mocks the HTTP server:
     ...   response=("HTTP/1.0 200 OK\r\n" +
     ...             "Header1: Value1\r\n" + 
     ...             "\r\n" +
-    ...             "Body text").encode(),
-    ...   method="GET")
+    ...             "Body text").encode())
 
 Then we request the URL and test that the browser generated request is proper:
 
@@ -79,15 +78,14 @@ Also check that the browser parsed the response properly
 Testing SSL support
 -------------------
 
-Since this URL uses https as the scheme the browser should automatically use
-  SSL and switch the default port used to 443
+Since this next URL uses https as the scheme the browser should automatically use
+  SSL and switch the default port used to 443.
 
     >>> url = 'https://test.test/example2'
     >>> test.socket.respond(url=url, 
     ...   response=("HTTP/1.0 200 OK\r\n" +
     ...             "\r\n" +
-    ...             "SSL working").encode(),
-    ...   method="GET")
+    ...             "SSL working").encode())
     >>> response_headers, response_body = web_browser.request(url)
     >>> command, path, version, headers = test.socket.parse_last_request(url)
     >>> command
@@ -103,14 +101,13 @@ Since this URL uses https as the scheme the browser should automatically use
     >>> response_headers
     {}
 
-SSL support also means some support for specifying ports:
+SSL support also means some support for specifying ports in the URL.
 
     >>> url = 'https://test.test:400/example3'
     >>> test.socket.respond(url=url, 
     ...   response=("HTTP/1.0 200 OK\r\n" +
     ...             "\r\n" +
-    ...             "Ports working").encode(),
-    ...   method="GET")
+    ...             "Ports working").encode())
     >>> response_headers, response_body = web_browser.request(url)
     >>> command, path, version, headers = test.socket.parse_last_request(url)
     >>> command
@@ -127,7 +124,7 @@ SSL support also means some support for specifying ports:
     {}
 
 
-Requesting the wrong port is an error:
+Requesting the wrong port is an error.
 
     >>> test.errors(web_browser.request, "http://test.test:401/example3")
     True

@@ -10,7 +10,7 @@ Testing boilerplate:
 
 When a response from the server has an HTTP code in the 300s
   it is a redirect.
-The browser should use the URL located in the 'Location' header
+The browser should use the URL located in the __Location__ header
   of the response to find where the content is now.
 
     >>> from_url = 'http://test.test/redirect1'
@@ -27,7 +27,7 @@ The browser should use the URL located in the 'Location' header
     >>> body
     'You found me'
     
-This 'Location' header may contain a full URL, as seen above, or
+This __Location__ header may contain a full URL, as seen above, or
   omit the scheme and host as seen here.
 
     >>> from_url = 'http://test.test/redirect2'
@@ -83,7 +83,7 @@ Infinite loops can be more complex, this is a two stage loop.
     True
 
 The browser should not perform a redirect for non 3XX status codes, even if
-  a 'Location' header is present
+  a __Location__ header is present
 
     >>> url = 'http://test.test/not_redirect'
     >>> do_not_follow = 'http://test.test/not_target'

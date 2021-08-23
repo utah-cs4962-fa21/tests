@@ -9,10 +9,10 @@ Testing boilerplate:
     >>> _ = test.ssl.patch().start()
     >>> import web_browser
 
-A server response can indicate if a response can be how long the response itself
-  can be cached.
-The 'Cache-Control' header can be set to  'max-age=<number>' to allow caching of
-  the response for '<number>' seconds.
+A server response can indicate if the response itself can be cached and for how 
+  long.
+The __Cache-Control__ header can be set to __max-age=[number]__ to allow caching of
+  the response for __[number]__ seconds.
 We can test if a browser is caching responses by changing the response and 
   telling the browser to re-request the page.
 
@@ -35,8 +35,8 @@ We can test if a browser is caching responses by changing the response and
     'Keep this for a while'
 
 Sometimes the server will explicitly state that caches are not to be used.
-In this case the response contains 'no-store' for the value of the 
-  'Cache-Control' header.
+In this case the response contains __no-store__ for the value of the 
+  __Cache-Control__ header.
 
     >>> url = "http://test.test/do_not_cache_me"
     >>> test.socket.respond(url=url, 

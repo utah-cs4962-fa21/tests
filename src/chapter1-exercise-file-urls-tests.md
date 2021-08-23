@@ -9,7 +9,7 @@ Testing boilerplate:
     >>> _ = test.ssl.patch().start()
     >>> import web_browser
 
-The 'file' scheme allows a web browser to open files on the local computer 
+The __file__ scheme allows a web browser to open files on the local computer 
   directly.
 In this case there will be no host or port, just the path to the file.
 This also means that there will be no response headers, just a response body.
