@@ -38,6 +38,8 @@ The output of the script is [doctest](https://docs.python.org/3/library/doctest.
 To facilitate testing, certain methods in standard modules have been overwritten
  in the testing framework.
 These are the methods which have been mocked.
+Using methods in these classes which have not been mocked may lead to incompatability
+  with this test harness.
  
 From the `socket`:
 - `connect`
