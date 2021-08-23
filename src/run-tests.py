@@ -26,7 +26,7 @@ CURRENT_TESTS["all"] = all_tests
 def run_doctests(files):
     mapped_results = dict()
     for fname in files:
-        mapped_results[fname] = doctest.testfile(fname)[0]
+        mapped_results[fname] = doctest.testfile(fname)
     return mapped_results
 
 def parse_arguments(argv):
@@ -46,14 +46,14 @@ def main(argv):
     mapped_results = run_doctests(tests)
     total_state = "all passed"
     print("\nSummarised results\n")
-    for name,failure_count in mapped_results.items():
+    for name,(failure_count, test_count) in mapped_results.items():
         state = "passed"
         if failure_count != 0:
-            state = "failed"
+            state = "failed {:<2} out of {:<2} tests".format(failure_count, test_count)
             total_state = "failed"
         print("{:>40}: {}".format(name, state))
     print("-"*52)
-    print("{:>40}: {}".format("Final", total_state))
+    print("{:>40}: {} ".format("Final", total_state))
 
     return int(total_state == "failed")
 
