@@ -7,7 +7,7 @@ Testing boilerplate:
     >>> import test
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
-    >>> import web_browser
+    >>> import browser
 
 Mock the HTTP server, as before:
 
@@ -23,7 +23,7 @@ This request/response pair was tested in the base tests, but now we are
   checking that the __Connection__ header is present and contains __close__, that a
   __User-Agent__ header is present, and that the request is HTTP 1.1:
 
-    >>> response_headers, response_body = web_browser.request(url)
+    >>> response_headers, response_body = browser.request(url)
     >>> command, path, version, headers = test.socket.parse_last_request(url)
     >>> command
     'GET'
@@ -44,7 +44,7 @@ We recommend reading
 [this description](https://docs.python-guide.org/writing/gotchas/#default-args)
     
     >>> extra_client_headers = {"ClientHeader" : "42"}
-    >>> headers, body = web_browser.request(url, headers=extra_client_headers)
+    >>> headers, body = browser.request(url, headers=extra_client_headers)
     >>> command, path, version, headers = test.socket.parse_last_request(url)
     >>> headers["clientheader"]
     '42'
@@ -55,7 +55,7 @@ In other words, the request generated should only contain one occurrence of each
   header.
   
     >>> extra_client_headers = {"User-Agent" : "different/1.0"}
-    >>> headers, body = web_browser.request(url, headers=extra_client_headers)
+    >>> headers, body = browser.request(url, headers=extra_client_headers)
     >>> raw_request = test.socket.last_request(url)
     >>> raw_request.count("User-Agent".encode())
     1

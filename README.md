@@ -11,10 +11,13 @@ Note that this repository will be updated throughout the semester to
 
 ## Running the tests
 
-To run the tests on your own simply run the 'src/run-tests.py' file from the
+To run the tests on your own simply run the __src/run-tests.py__ file from the
     root directory of your web browser git.
-The script will pick up the 'web-browser.py' file from the directory in
+The script will pick up the __browser.py__ file from the directory in
     which it is ran.
+With no arguments this script will test the coming week's homework, but optionally an 
+    argument is used to specify a chapter's tests to run such as __chapter1__ to specify
+    the tests for the first chapter or __all__ to specify all tests available.
 The output of the script is [doctest](https://docs.python.org/3/library/doctest.html) 
     output for each markdown file for the current chapter followed by a 
     summary of which files contain failed tests.

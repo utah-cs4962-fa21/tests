@@ -7,7 +7,7 @@ Testing boilerplate:
     >>> import test
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
-    >>> import web_browser
+    >>> import browser
 
 The __file__ scheme allows a web browser to open files on the local computer 
   directly.
@@ -21,11 +21,11 @@ Here we make a file, put some text in it, and make a file scheme request.
     ...   f.write("Hello world")
     11
     >>> url = "file://{}".format(full_path)
-    >>> headers, body = web_browser.request(url)
+    >>> headers, body = browser.request(url)
     >>> body
     'Hello world'
     
 Requesting a nonexistent file should result in error.
 
-    >>> test.errors(web_browser.request, "/this/file/does/not/exist")
+    >>> test.errors(browser.request, "/this/file/does/not/exist")
     True

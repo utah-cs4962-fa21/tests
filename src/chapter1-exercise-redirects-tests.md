@@ -6,7 +6,7 @@ Testing boilerplate:
     >>> import test
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
-    >>> import web_browser
+    >>> import browser
 
 When a response from the server has an HTTP code in the 300s
   it is a redirect.
@@ -23,7 +23,7 @@ The browser should use the URL located in the __Location__ header
     ...   response=("HTTP/1.0 200 Ok\r\n" +
     ...             "\r\n" +
     ...             "You found me").encode())
-    >>> headers, body = web_browser.request(from_url)
+    >>> headers, body = browser.request(from_url)
     >>> body
     'You found me'
     
@@ -40,7 +40,7 @@ This __Location__ header may contain a full URL, as seen above, or
     ...   response=("HTTP/1.0 200 Ok\r\n"
     ...             "\r\n" +
     ...             "You found me again").encode())
-    >>> headers, body = web_browser.request(from_url)
+    >>> headers, body = browser.request(from_url)
     >>> body
     'You found me again'
     
@@ -58,7 +58,7 @@ Now that you have seen the content of the redirect response we
     ...   response=("HTTP/1.0 200 Ok\r\n" +
     ...             "\r\n" +
     ...             "I need to hide better").encode())
-    >>> headers, body = web_browser.request(start_url)
+    >>> headers, body = browser.request(start_url)
     >>> body
     'I need to hide better'
 
@@ -68,7 +68,7 @@ The simplest infinite loop is a redirect to itself.
 
     >>> url = 'http://test.test/redirect4'
     >>> test.socket.redirect_url(from_url=url, to_url=url)
-    >>> test.errors(web_browser.request, url)
+    >>> test.errors(browser.request, url)
     True
 
 Infinite loops can be more complex, this is a two stage loop.
@@ -77,9 +77,9 @@ Infinite loops can be more complex, this is a two stage loop.
     >>> url2 = 'http://test.test/target5'
     >>> test.socket.redirect_url(from_url=url1, to_url=url2)
     >>> test.socket.redirect_url(from_url=url2, to_url=url1)
-    >>> test.errors(web_browser.request, url1)
+    >>> test.errors(browser.request, url1)
     True
-    >>> test.errors(web_browser.request, url2)
+    >>> test.errors(browser.request, url2)
     True
 
 The browser should not perform a redirect for non 3XX status codes, even if
@@ -96,7 +96,7 @@ The browser should not perform a redirect for non 3XX status codes, even if
     ...   response=("HTTP/1.0 200 Ok\r\n" +
     ...             "\r\n" +
     ...             "Too far").encode())
-    >>> header, body = web_browser.request(url)
+    >>> header, body = browser.request(url)
     >>> body
     'Stay here'
 

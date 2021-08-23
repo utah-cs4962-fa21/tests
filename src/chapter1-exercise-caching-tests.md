@@ -7,7 +7,7 @@ Testing boilerplate:
     >>> import test
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
-    >>> import web_browser
+    >>> import browser
 
 A server response can indicate if the response itself can be cached and for how 
   long.
@@ -22,7 +22,7 @@ We can test if a browser is caching responses by changing the response and
     ...             "Cache-Control: max-age=9001\r\n" +
     ...             "\r\n" +
     ...             "Keep this for a while").encode())
-    >>> header, body = web_browser.request(url)
+    >>> header, body = browser.request(url)
     >>> body
     'Keep this for a while'
     >>> test.socket.respond(url=url, 
@@ -30,7 +30,7 @@ We can test if a browser is caching responses by changing the response and
     ...             "Cache-Control: max-age=9001\r\n" +
     ...             "\r\n" +
     ...             "Don't even ask for this").encode())
-    >>> header, body = web_browser.request(url)
+    >>> header, body = browser.request(url)
     >>> body
     'Keep this for a while'
 
@@ -44,7 +44,7 @@ In this case the response contains __no-store__ for the value of the
     ...             "Cache-Control: no-store\r\n" +
     ...             "\r\n" +
     ...             "Don't cache me").encode())
-    >>> header, body = web_browser.request(url)
+    >>> header, body = browser.request(url)
     >>> body
     "Don't cache me"
     >>> test.socket.respond(url=url, 
@@ -52,7 +52,7 @@ In this case the response contains __no-store__ for the value of the
     ...             "Cache-Control: no-store\r\n" +
     ...             "\r\n" +
     ...             "Ask for this").encode())
-    >>> header, body = web_browser.request(url)
+    >>> header, body = browser.request(url)
     >>> body
     'Ask for this'
     
@@ -66,7 +66,7 @@ Here we cache, then change, another URL and check that both of the URLs cached
     ...             "Cache-Control: max-age=9001\r\n" + 
     ...             "\r\n" +
     ...             "Keep this for a while, also").encode())
-    >>> header, body = web_browser.request(url)
+    >>> header, body = browser.request(url)
     >>> body
     'Keep this for a while, also'
     >>> test.socket.respond(url=url, 
@@ -74,10 +74,10 @@ Here we cache, then change, another URL and check that both of the URLs cached
     ...             "Cache-Control: max-age=9001\r\n" +
     ...             "\r\n" +
     ...             "Don't even ask for this").encode())
-    >>> header, body = web_browser.request(url)
+    >>> header, body = browser.request(url)
     >>> body
     'Keep this for a while, also'
-    >>> header, body = web_browser.request("http://test.test/cache_me1")
+    >>> header, body = browser.request("http://test.test/cache_me1")
     >>> body
     'Keep this for a while'
     
@@ -90,27 +90,27 @@ A cached entry can be invalidated by time elapsing, so here we cache a response
     ...             "Cache-Control: max-age=1\r\n" + 
     ...             "\r\n" +
     ...             "Keep this for a short while").encode())
-    >>> header, body = web_browser.request(url)
+    >>> header, body = browser.request(url)
     >>> body
     'Keep this for a short while'
     >>> test.socket.respond(url=url, 
     ...   response=("HTTP/1.0 200 Ok\r\n" +
     ...             "\r\n" +
     ...             "Don't ask for this immediately").encode())
-    >>> header, body = web_browser.request(url)
+    >>> header, body = browser.request(url)
     >>> body
     'Keep this for a short while'
     >>> time.sleep(2)
-    >>> header, body = web_browser.request(url)
+    >>> header, body = browser.request(url)
     >>> body
     "Don't ask for this immediately"
 
 Each cached response will have different lifetimes.
 The responses cached earlier should still be valid.
 
-    >>> header, body = web_browser.request("http://test.test/cache_me1")
+    >>> header, body = browser.request("http://test.test/cache_me1")
     >>> body
     'Keep this for a while'
-    >>> header, body = web_browser.request("http://test.test/cache_me2")
+    >>> header, body = browser.request("http://test.test/cache_me2")
     >>> body
     'Keep this for a while, also'

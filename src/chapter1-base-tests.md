@@ -10,7 +10,7 @@ Here's the testing boilerplate.
     >>> import test
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
-    >>> import web_browser
+    >>> import browser
     
 
 Testing `show`
@@ -19,25 +19,25 @@ Testing `show`
 The `show` function is supposed to print some HTML to the screen, but
 skip the tags inside.
 
-    >>> web_browser.show('<body>hello</body>')
+    >>> browser.show('<body>hello</body>')
     hello
-    >>> web_browser.show('<body><wbr>hello</body>')
+    >>> browser.show('<body><wbr>hello</body>')
     hello
-    >>> web_browser.show('<body>he<wbr>llo</body>')
+    >>> browser.show('<body>he<wbr>llo</body>')
     hello
-    >>> web_browser.show('<body>hel<div>l</div>o</body>')
+    >>> browser.show('<body>hel<div>l</div>o</body>')
     hello
 
 Note that the tags do not have to match:
 
-    >>> web_browser.show('<body><p>hel</div>lo</body>')
+    >>> browser.show('<body><p>hel</div>lo</body>')
     hello
-    >>> web_browser.show('<body>h<p>el<div>l</p>o</div></body>')
+    >>> browser.show('<body>h<p>el<div>l</p>o</div></body>')
     hello
     
 Newlines should not be removed:
 
-    >>> web_browser.show('<body>hello\nworld</body>')
+    >>> browser.show('<body>hello\nworld</body>')
     hello
     world
 
@@ -57,7 +57,7 @@ To test it, we use the `test.socket` object, which mocks the HTTP server:
 
 Then we request the URL and test that the browser generated request is proper:
 
-    >>> response_headers, response_body = web_browser.request(url)
+    >>> response_headers, response_body = browser.request(url)
     >>> command, path, version, headers = test.socket.parse_last_request(url)
     >>> command
     'GET'
@@ -86,7 +86,7 @@ Since this next URL uses https as the scheme the browser should automatically us
     ...   response=("HTTP/1.0 200 OK\r\n" +
     ...             "\r\n" +
     ...             "SSL working").encode())
-    >>> response_headers, response_body = web_browser.request(url)
+    >>> response_headers, response_body = browser.request(url)
     >>> command, path, version, headers = test.socket.parse_last_request(url)
     >>> command
     'GET'
@@ -108,7 +108,7 @@ SSL support also means some support for specifying ports in the URL.
     ...   response=("HTTP/1.0 200 OK\r\n" +
     ...             "\r\n" +
     ...             "Ports working").encode())
-    >>> response_headers, response_body = web_browser.request(url)
+    >>> response_headers, response_body = browser.request(url)
     >>> command, path, version, headers = test.socket.parse_last_request(url)
     >>> command
     'GET'
@@ -126,6 +126,6 @@ SSL support also means some support for specifying ports in the URL.
 
 Requesting the wrong port is an error.
 
-    >>> test.errors(web_browser.request, "http://test.test:401/example3")
+    >>> test.errors(browser.request, "http://test.test:401/example3")
     True
 
