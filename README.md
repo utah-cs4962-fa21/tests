@@ -63,7 +63,7 @@ Specifically, here are the mocked methods in various modules:
 | Library | Methods |
 | ------- | ------- |
 | `socket` | The `socket` class and its methods `connect`, `send`, `makefile`, `close` |
-| `ssl` | The `wrap_socket` method |
+| `ssl` | The `wrap_socket` function |
 
 This table will be updated throughout the semester
     as we test more parts of your browser.
