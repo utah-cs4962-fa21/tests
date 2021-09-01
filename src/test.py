@@ -121,7 +121,7 @@ class SilentCanvas:
     def create_polygon(self, *args, **kwargs):
         pass
 
-    def pack(self):
+    def pack(self, expand=None, fill=None):
         pass
 
     def delete(self, v):
@@ -141,13 +141,20 @@ class MockCanvas:
             print("create_text: x={} y={} text={}".format(
                 x, y, text))
 
-    def pack(self):
+    def pack(self, expand=None, fill=None):
         pass
 
     def delete(self, v):
         pass
 
 original_tkinter_canvas = tkinter.Canvas
+
+
+class resize_event:
+    def __init__(self, width, height):
+        self.height = height
+        self.width = width
+    
 
 def patch_canvas():
     tkinter.Canvas = MockCanvas
