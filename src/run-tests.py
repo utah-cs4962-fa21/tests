@@ -16,10 +16,10 @@ CURRENT_TESTS = {
                   "chapter1-exercise-caching-tests.md",
                   ],
     "chapter2" : ["chapter2-base-tests.md",
+                  "chapter2-exercise-line-breaks-tests.md",
                   "chapter2-exercise-mouse-wheel-tests.md",
                   "chapter2-exercise-resizing-tests.md",
                   "chapter2-exercise-zoom-tests.md",
-                  #"chapter2-exercise--tests.md",
                   ],
 }
 
