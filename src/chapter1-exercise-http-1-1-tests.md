@@ -56,8 +56,7 @@ In other words, the request should only contain one occurrence of each header.
   
     >>> extra_client_headers = {"User-Agent" : "different/1.0"}
     >>> headers, body = browser.request(url, headers=extra_client_headers)
-    >>> raw_request = test.socket.last_request(url)
-    >>> raw_request.count("User-Agent".encode())
+    >>> test.socket.count_header_last_request(url, "User-Agent")
     1
     >>> command, path, version, headers = test.socket.parse_last_request(url)
     >>> headers["user-agent"]
@@ -67,6 +66,5 @@ Remember that headers are case-insensitive:
 
     >>> extra_client_headers = {"user-agent" : "a/1.0", "User-Agent" : "b/1.0"}
     >>> headers, body = browser.request(url, headers=extra_client_headers)
-    >>> raw_request = test.socket.last_request(url)
-    >>> raw_request.count("User-Agent".encode())
+    >>> test.socket.count_header_last_request(url, "User-Agent")
     1
