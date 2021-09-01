@@ -21,11 +21,16 @@ class socket:
     def __init__(self, *args, **kwargs):
         self.request = b""
         self.connected = False
+        self.ssl_hostname = None
 
     def connect(self, host_port):
-        self.scheme = "http"
         self.host, self.port = host_port
         self.connected = True
+        if self.ssl_hostname != None:
+            assert self.ssl_hostname == self.host
+            self.scheme = "https"
+        else:
+            self.scheme = "http"
 
     def send(self, text):
         self.request += text
@@ -70,6 +75,14 @@ class socket:
         return cls.Requests[url][-1]
 
     @classmethod
+    def count_header_last_request(cls, url, header):
+        raw_request = cls.Requests[url][-1].decode()
+        raw_headers, raw_body = raw_request.split("\r\n\r\n", 1)
+        raw_headers = raw_headers.lower()
+        header = header.lower()
+        return raw_headers.count(header)
+
+    @classmethod
     def parse_last_request(cls, url):
         raw_request = cls.Requests[url][-1].decode()
         raw_command, raw_headers = raw_request.split('\r\n', 1)
@@ -88,7 +101,9 @@ class socket:
                     method="GET")
 class ssl:
     def wrap_socket(self, s, server_hostname):
-        assert s.host == server_hostname
+        s.ssl_hostname = server_hostname
+        if s.connected:
+            assert s.host == server_hostname
         s.scheme = "https"
         return s
 
