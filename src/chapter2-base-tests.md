@@ -37,7 +37,7 @@ Note that the tags do not have to match:
     >>> s = browser.lex('<body>h<p>el<div>l</p>o</div></body>')
     >>> s
     'hello'
-    
+
 Newlines should not be removed:
 
     >>> s = browser.lex('<body>hello\nworld</body>')
@@ -87,7 +87,7 @@ Testing `Browser.load`
 Let's first mock a URL to load:
 
     >>> url = 'http://test.test/example1'
-    >>> test.socket.respond(url=url, 
+    >>> test.socket.respond(url=url,
     ...   response=("HTTP/1.0 200 OK\r\n" +
     ...             "Header1: Value1\r\n"
     ...             "\r\n" +
@@ -125,7 +125,7 @@ a convenient value:
 
     >>> browser.SCROLL_STEP = browser.VSTEP + 2
 
-After scrolling, all of the text is offscreen, so no text is output to the
+After scrolling, all of the text is off screen, so no text is output to the
 canvas:
 
     >>> this_browser.scrolldown({})
@@ -133,9 +133,9 @@ canvas:
 Now let's load a different URL that provides three lines of text:
 
     >>> url = 'http://test.test/example2'
-    >>> test.socket.respond(url=url, 
+    >>> test.socket.respond(url=url,
     ...   response = ("HTTP/1.0 200 OK\r\n" +
-    ...               "Header1: Value1\r\n" + 
+    ...               "Header1: Value1\r\n" +
     ...               "\r\n" +
     ...               "Body text that is longer").encode())
     >>> this_browser = browser.Browser()

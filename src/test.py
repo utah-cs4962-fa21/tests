@@ -71,6 +71,13 @@ class socket:
         cls.URLs[url] = [method, response, body]
 
     @classmethod
+    def respond_200(cls, url, body):
+        response = ("HTTP/1.0 200 OK\r\n" +
+                    "\r\n" +
+                    body).encode()
+        cls.respond(url, response, "GET")
+
+    @classmethod
     def last_request(cls, url):
         return cls.Requests[url][-1]
 
@@ -169,7 +176,12 @@ class resize_event:
     def __init__(self, width, height):
         self.height = height
         self.width = width
-    
+
+class mousewheel_event:
+    def __init__(self, delta):
+        self.delta = delta
+        self.num = "??"
+
 
 def patch_canvas():
     tkinter.Canvas = MockCanvas
