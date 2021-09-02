@@ -39,7 +39,7 @@ The `x` value is always one, but `y` increments, since the canvas is of width
     create_text: x=1 y=4 text=d...
 
 Calling `resize` with a wider window should allow the text to be on one line.
-Now all the characters have the same `y`, but `x` increments.
+Now all the characters have the same `y`, but different `x` increments.
 
     >>> e = test.resize_event(width=100, height=10)
     >>> this_browser.resize(e)
