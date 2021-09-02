@@ -12,6 +12,8 @@ Testing boilerplate:
 Testing `resize`
 ------------------
 
+Make sure that your `Browser` class handles resize events in a `resize` method.
+
 Let's override text spacing and line width to make it easy to do math
 when testing:
 
