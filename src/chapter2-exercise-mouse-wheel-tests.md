@@ -12,6 +12,8 @@ Testing boilerplate:
 Testing `scrollup`
 ------------------
 
+Your browser should implement a `scrollup` method for scrolling up.
+
 Let's override text spacing and line width to make it easy to do math
 when testing:
 
