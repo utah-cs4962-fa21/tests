@@ -88,7 +88,7 @@ The browser should not perform a redirect for non 3XX status codes, even if
     >>> url = 'http://test.test/not_redirect'
     >>> do_not_follow = 'http://test.test/not_target'
     >>> test.socket.respond(url=url, 
-    ...   response=("HTTP/1.0 500 Internal Server Error\r\n" +
+    ...   response=("HTTP/1.0 200 OK\r\n" +
     ...             "Location: {}\r\n" +
     ...             "\r\n" +
     ...             "Stay here").format(do_not_follow).encode())
