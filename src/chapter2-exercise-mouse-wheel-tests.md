@@ -72,7 +72,7 @@ Event details
 -------------
 
 The \<MouseWheel\> event behaves differently for each platform, as described
-  (here)[https://wiki.tcl-lang.org/page/mousewheel]:
+  [here](https://wiki.tcl-lang.org/page/mousewheel):
 * Windows: A mousewheel click is translated by a delta of 120. Take care, that high resolution mousepads may emit smaller values which may accumulate.
 * MacOS: A mousewheel click is translated by a delta of 1.
 * X11: The mousewheel triggers button 4/5 (vertical) and Shift-4/Shift-5 (horizontal)
