@@ -37,27 +37,26 @@ Loading that URL results in displaying text at size 16:
 
     >>> this_browser = browser.Browser()
     >>> this_browser.load(url)
-    create_text: x=13 y=18 text=a font=Font size=12 weight=None slant=None style=None anchor=None
-    create_text: x=26 y=18 text=b font=Font size=12 weight=None slant=None style=None anchor=None
+    create_text: x=13 y=18 text=a font=Font size=16 weight=None slant=None style=None anchor=None
+    create_text: x=26 y=18 text=b font=Font size=16 weight=None slant=None style=None anchor=None
 
 Calling `zoomout` should make the font size 8, and the gaps between words should halve as well.
 
     >>> this_browser.zoomout({})
-    create_text: x=12 y=16 text=a font=Font size=11 weight=None slant=None style=None anchor=None
-    create_text: x=24 y=16 text=b font=Font size=11 weight=None slant=None style=None anchor=None
+    create_text: x=6 y=9 text=a font=Font size=8 weight=None slant=None style=None anchor=None
+    create_text: x=12 y=9 text=b font=Font size=8 weight=None slant=None style=None anchor=None
 
 Calling `zoomin` should restore the default output.
 
     >>> this_browser.zoomin({})
-    create_text: x=13 y=18 text=a font=Font size=12 weight=None slant=None style=None anchor=None
-    create_text: x=26 y=18 text=b font=Font size=12 weight=None slant=None style=None anchor=None
+    create_text: x=12 y=18 text=a font=Font size=16 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=18 text=b font=Font size=16 weight=None slant=None style=None anchor=None
 
 Calling `zoomin` again should make the font size 32, make the gaps between letter huge.
 
     >>> this_browser.zoomin({})
-    create_text: x=14 y=19 text=a font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=28 y=19 text=b font=Font size=13 weight=None slant=None style=None anchor=None
-
+    create_text: x=24 y=36 text=a font=Font size=32 weight=None slant=None style=None anchor=None
+    create_text: x=48 y=36 text=b font=Font size=32 weight=None slant=None style=None anchor=None
 
 Scrolling while zoomed
 ---------------------
@@ -73,21 +72,22 @@ Let's mock a URL and load it:
     >>> test.socket.respond_200(url=url,
     ...   body="abcd")
     >>> this_browser.load(url)
-    create_text: x=14 y=19 text=a font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=14 y=38 text=b font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=14 y=57 text=c font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=14 y=76 text=d font=Font size=13 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=36 text=a font=Font size=32 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=72 text=b font=Font size=32 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=108 text=c font=Font size=32 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=144 text=d font=Font size=32 weight=None slant=None style=None anchor=None
 
 Scroll down
 
     >>> this_browser.scrolldown({})
-    create_text: x=14 y=-19 text=a font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=14 y=0 text=b font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=14 y=19 text=c font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=14 y=38 text=d font=Font size=13 weight=None slant=None style=None anchor=None
-
+    create_text: x=24 y=-2 text=a font=Font size=32 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=34 text=b font=Font size=32 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=70 text=c font=Font size=32 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=106 text=d font=Font size=32 weight=None slant=None style=None anchor=None
+    
 Again
 
     >>> this_browser.scrolldown({})
-    create_text: x=14 y=-19 text=c font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=14 y=0 text=d font=Font size=13 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=-4 text=b font=Font size=32 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=32 text=c font=Font size=32 weight=None slant=None style=None anchor=None
+    create_text: x=24 y=68 text=d font=Font size=32 weight=None slant=None style=None anchor=None
