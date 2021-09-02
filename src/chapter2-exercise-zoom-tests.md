@@ -12,10 +12,14 @@ Testing boilerplate:
 Testing `resize`
 ------------------
 
-To allow testing of your zoom functionality make sure to name the
-  method which handles the event for the `-` and `+` keys `zoomout` and `zoomout`, respectively.
+To allow testing of your zoom functionality make sure to handle the `-` and `+` keys
+with methods named `zoomout` and `zoomin`, respectively.
 
-Reset text spacing and line width in case this is ran in series with the other
+The font size should start at 16. When you zoom in, the font size should double, and when you zoom out it should halve.
+Be careful: in Tk, the font size must always be an integer, and in Python division always returns a float.
+So after doubling or halving the font size, call `int` on the result to make sure it is an integer.
+
+Reset text spacing and line width in case this is run in series with the other
 tests.
 
     >>> browser.WIDTH = 800
@@ -29,15 +33,14 @@ Let's mock a URL to load:
     >>> test.socket.respond_200(url=url,
     ...   body="ab")
 
-Loading that URL results in a display list:
+Loading that URL results in displaying text at size 16:
 
     >>> this_browser = browser.Browser()
     >>> this_browser.load(url)
     create_text: x=13 y=18 text=a font=Font size=12 weight=None slant=None style=None anchor=None
     create_text: x=26 y=18 text=b font=Font size=12 weight=None slant=None style=None anchor=None
 
-Calling `zoomout` should make the font size 11, and move the b slightly to the
-  left.
+Calling `zoomout` should make the font size 8, and the gaps between words should halve as well.
 
     >>> this_browser.zoomout({})
     create_text: x=12 y=16 text=a font=Font size=11 weight=None slant=None style=None anchor=None
@@ -49,8 +52,7 @@ Calling `zoomin` should restore the default output.
     create_text: x=13 y=18 text=a font=Font size=12 weight=None slant=None style=None anchor=None
     create_text: x=26 y=18 text=b font=Font size=12 weight=None slant=None style=None anchor=None
 
-Calling `zoomin` again should make the font size 13, and move b slightly to the
-  right.
+Calling `zoomin` again should make the font size 32, make the gaps between letter huge.
 
     >>> this_browser.zoomin({})
     create_text: x=14 y=19 text=a font=Font size=13 weight=None slant=None style=None anchor=None
@@ -89,11 +91,3 @@ Again
     >>> this_browser.scrolldown({})
     create_text: x=14 y=-19 text=c font=Font size=13 weight=None slant=None style=None anchor=None
     create_text: x=14 y=0 text=d font=Font size=13 weight=None slant=None style=None anchor=None
-
-This relies on having finished the `Mouse Wheel` exercise
-
-    >>> this_browser.scrollup({})
-    create_text: x=14 y=-19 text=a font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=14 y=0 text=b font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=14 y=19 text=c font=Font size=13 weight=None slant=None style=None anchor=None
-    create_text: x=14 y=38 text=d font=Font size=13 weight=None slant=None style=None anchor=None
