@@ -19,18 +19,21 @@ CURRENT_TESTS = {
 }
 
 all_tests = list()
+specific_file_tests = {}
+
+''' 
+add option to run all tests by running script w/ argval 'all',
+and add option to run individual test files by name (removing '-exercise-' infix substring if present)
+'''
 for tests in CURRENT_TESTS.values():
     all_tests.extend(tests)
-CURRENT_TESTS["all"] = all_tests
-
-
-tests_to_merge = {}
-for tests in CURRENT_TESTS.values(): # TODO: consolidate this loop with the previous one if that doesnt compromise readability
     for test in tests:
         arg_val = re.sub(r'-exercise', '', test).removesuffix('-tests.md')
-        tests_to_merge[arg_val] = [test]
+        specific_file_tests[arg_val] = [test]
 
-CURRENT_TESTS |= tests_to_merge
+CURRENT_TESTS["all"] = all_tests
+
+CURRENT_TESTS |= specific_file_tests
 
 
 def run_doctests(files):
