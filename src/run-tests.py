@@ -27,6 +27,7 @@ and add option to run individual test files by name (removing '-exercise-' infix
 '''
 for tests in CURRENT_TESTS.values():
     all_tests.extend(tests)
+
     for test in tests:
         arg_val = re.sub(r'-exercise', '', test).removesuffix('-tests.md')
         specific_file_tests[arg_val] = [test]
