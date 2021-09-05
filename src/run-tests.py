@@ -5,6 +5,7 @@ import argparse
 import doctest
 import os
 import sys
+import re
 
 sys.path.append(os.getcwd())
 
@@ -21,7 +22,16 @@ all_tests = list()
 for tests in CURRENT_TESTS.values():
     all_tests.extend(tests)
 CURRENT_TESTS["all"] = all_tests
-    
+
+
+tests_to_merge = {}
+for tests in CURRENT_TESTS.values(): # TODO: consolidate this loop with the previous one if that doesnt compromise readability
+    for test in tests:
+        arg_val = re.sub(r'-exercise', '', test).removesuffix('-tests.md')
+        tests_to_merge[arg_val] = [test]
+
+CURRENT_TESTS |= tests_to_merge
+
 
 def run_doctests(files):
     mapped_results = dict()
