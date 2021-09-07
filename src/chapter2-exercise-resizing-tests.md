@@ -23,7 +23,7 @@ when testing:
 
 Let's mock a URL to load:
 
-    >>> url = 'http://test.test/example1'
+    >>> url = 'http://test.test/chapter2-example6'
     >>> test.socket.respond_200(url=url,
     ...   body="abcd")
 

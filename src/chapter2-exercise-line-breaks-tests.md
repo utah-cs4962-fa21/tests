@@ -36,7 +36,7 @@ when testing:
 
 Let's mock a URL to load:
 
-    >>> url = 'http://test.test/example1'
+    >>> url = 'http://test.test/chapter2-example3'
     >>> test.socket.respond_200(url=url,
     ...   body=("u\r\n" +
     ...         "d"))
@@ -53,7 +53,7 @@ Note that the newline characters are not present in the output,
 
 Each additional newline moves the text down by twice `VSTEP`
 
-    >>> url = 'http://test.test/example2'
+    >>> url = 'http://test.test/chapter2-example4'
     >>> test.socket.respond_200(url=url,
     ...   body=("u\r\n" +
     ...         "\r\n" +

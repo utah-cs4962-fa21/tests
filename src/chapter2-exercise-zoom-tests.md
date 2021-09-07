@@ -29,7 +29,7 @@ tests.
 
 Let's mock a URL to load:
 
-    >>> url = 'http://test.test/example1'
+    >>> url = 'http://test.test/chapter2-example7'
     >>> test.socket.respond_200(url=url,
     ...   body="ab")
 
@@ -68,7 +68,7 @@ Change the line width and scroll step
 
 Let's mock a URL and load it:
 
-    >>> url = 'http://test.test/example2'
+    >>> url = 'http://test.test/chapter2-example8'
     >>> test.socket.respond_200(url=url,
     ...   body="abcd")
     >>> this_browser.load(url)

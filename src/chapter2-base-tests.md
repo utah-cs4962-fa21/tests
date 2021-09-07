@@ -86,7 +86,7 @@ Testing `Browser.load`
 
 Let's first mock a URL to load:
 
-    >>> url = 'http://test.test/example1'
+    >>> url = 'http://test.test/chapter2-example1'
     >>> test.socket.respond(url=url,
     ...   response=("HTTP/1.0 200 OK\r\n" +
     ...             "Header1: Value1\r\n"
@@ -132,7 +132,7 @@ canvas:
 
 Now let's load a different URL that provides three lines of text:
 
-    >>> url = 'http://test.test/example2'
+    >>> url = 'http://test.test/chapter2-example2'
     >>> test.socket.respond(url=url,
     ...   response = ("HTTP/1.0 200 OK\r\n" +
     ...               "Header1: Value1\r\n" +
