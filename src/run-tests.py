@@ -15,6 +15,12 @@ CURRENT_TESTS = {
                   "chapter1-exercise-redirects-tests.md",
                   "chapter1-exercise-caching-tests.md",
                   ],
+    "chapter2" : ["chapter2-base-tests.md",
+                  "chapter2-exercise-line-breaks-tests.md",
+                  "chapter2-exercise-resizing-tests.md",
+                  "chapter2-exercise-mouse-wheel-tests.md",
+                  "chapter2-exercise-zoom-tests.md",
+                  ],
 }
 
 all_tests = list()
@@ -26,14 +32,15 @@ CURRENT_TESTS["all"] = all_tests
 def run_doctests(files):
     mapped_results = dict()
     for fname in files:
-        mapped_results[fname] = doctest.testfile(fname)
+        mapped_results[fname] = doctest.testfile(fname,
+                                                 optionflags=doctest.ELLIPSIS)
     return mapped_results
 
 def parse_arguments(argv):
     parser = argparse.ArgumentParser(description='WBE test runner')
     parser.add_argument("chapter",
                         nargs="?",
-                        default="chapter1",
+                        default="chapter2",
                         choices=list(CURRENT_TESTS),
                         help="Which chapter's tests to run")
     args = parser.parse_args(argv[1:])
