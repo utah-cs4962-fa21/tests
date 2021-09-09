@@ -153,7 +153,7 @@ class SilentCanvas:
     def create_line(self, x1, y1, x2, y2):
         pass
 
-    def create_line(self, x1, y1, x2, y2):
+    def create_oval(self, x1, y1, x2, y2):
         pass
 
     def create_polygon(self, *args, **kwargs):
