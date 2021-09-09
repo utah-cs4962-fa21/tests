@@ -171,6 +171,18 @@ class MockCanvas:
     def __init__(self, *args, **kwargs):
         pass
 
+    def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None):
+        pass
+
+    def create_line(self, x1, y1, x2, y2):
+        pass
+
+    def create_oval(self, x1, y1, x2, y2):
+        pass
+
+    def create_polygon(self, *args, **kwargs):
+        pass
+
     def create_text(self, x, y, text, font=None, anchor=None):
         if font or anchor:
             print("create_text: x={} y={} text={} font={} anchor={}".format(
