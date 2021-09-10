@@ -184,6 +184,8 @@ class MockCanvas:
         pass
 
     def create_text(self, x, y, text, font=None, anchor=None):
+        if text.isspace():
+            return
         if font or anchor:
             print("create_text: x={} y={} text={} font={} anchor={}".format(
                 x, y, text, font, anchor))
