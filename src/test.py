@@ -12,7 +12,11 @@ import email
 from unittest import mock
 
 
+class certifi:
+    def where(self):
+        pass
 
+sys.modules["certifi"] = certifi()
 
 class socket:
     URLs = {}
@@ -35,7 +39,7 @@ class socket:
     def send(self, text):
         self.request += text
         self.method, self.path, _ = self.request.decode("latin1").split(" ", 2)
-        
+
         if self.method == "POST":
             beginning, self.body = self.request.decode("latin1").split("\r\n\r\n")
             headers = [item.split(": ") for item in beginning.split("\r\n")[1:]]
@@ -106,6 +110,7 @@ class socket:
                               "Location: {}\r\n" +
                               "\r\n").format(to_url).encode(),
                     method="GET")
+
 class ssl:
     def wrap_socket(self, s, server_hostname):
         s.ssl_hostname = server_hostname
@@ -114,9 +119,20 @@ class ssl:
         s.scheme = "https"
         return s
 
+    def load_default_certs():
+        pass
+
+    def load_verify_locations(**kwargs):
+        pass
+
+    @classmethod
+    def SSLContext(self, protocol=None):
+        return ssl.create_default_context()
+
     @classmethod
     def patch(cls):
         return mock.patch("ssl.create_default_context", wraps=cls)
+
 
 class SilentTk:
     def bind(self, event, callback):
@@ -137,7 +153,7 @@ class SilentCanvas:
     def create_line(self, x1, y1, x2, y2):
         pass
 
-    def create_line(self, x1, y1, x2, y2):
+    def create_oval(self, x1, y1, x2, y2):
         pass
 
     def create_polygon(self, *args, **kwargs):
@@ -155,7 +171,21 @@ class MockCanvas:
     def __init__(self, *args, **kwargs):
         pass
 
+    def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None):
+        pass
+
+    def create_line(self, x1, y1, x2, y2):
+        pass
+
+    def create_oval(self, x1, y1, x2, y2):
+        pass
+
+    def create_polygon(self, *args, **kwargs):
+        pass
+
     def create_text(self, x, y, text, font=None, anchor=None):
+        if text.isspace():
+            return
         if font or anchor:
             print("create_text: x={} y={} text={} font={} anchor={}".format(
                 x, y, text, font, anchor))
@@ -236,4 +266,3 @@ class Event:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-
