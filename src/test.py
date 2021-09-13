@@ -12,6 +12,10 @@ import email
 from unittest import mock
 
 
+def normalize_display_list(dl):
+    dl = [(float(t[0]), float(t[1]), t[2].replace("\xad", ""),  *t[3:]) for t in dl]
+    return dl
+
 class certifi:
     def where(self):
         pass
@@ -227,7 +231,7 @@ class MockFont:
         self.style = style
 
     def measure(self, word):
-        return self.size * len(word)
+        return self.size * len(word.replace("\xad", ""))
 
     def metrics(self, name=None):
         all = {"ascent" : self.size * 0.75, "descent": self.size * 0.25,
