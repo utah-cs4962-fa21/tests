@@ -21,6 +21,12 @@ CURRENT_TESTS = {
                   "chapter2-exercise-mouse-wheel-tests.md",
                   "chapter2-exercise-zoom-tests.md",
                   ],
+    "chapter3" : ["chapter3-base-tests.md",
+                  "chapter3-exercise-centered-text-tests.md",
+                  "chapter3-exercise-superscripts-tests.md",
+                  "chapter3-exercise-soft-hyphens-tests.md",
+                  "chapter3-exercise-small-caps-tests.md",
+                  ],
 }
 
 all_tests = list()
