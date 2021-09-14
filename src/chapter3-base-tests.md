@@ -16,6 +16,12 @@ The `lex` function in chapter three has been beefed up to return an array
 of `Tag` or `Text` objects, rather than just the stream of characters from the
 input.
 
+To allow us to print these in a readable form please add a `__repr__(self):` method
+  to your `Tag` and `Text` classes.
+The bodies of these methods should, respectively, be 
+`return "Tag('{}')".format(self.tag)` 
+and `return "Text('{}')".format(self.text)`
+
     >>> browser.lex('<body>hello</body>')
     [Tag('body'), Text('hello'), Tag('/body')]
     >>> browser.lex('he<body>llo</body>')
