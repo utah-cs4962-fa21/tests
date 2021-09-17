@@ -46,6 +46,11 @@ With no arguments this script will test the coming week's homework,
 For example, run `python3 src/run-tests.py chapter1`
     to run the tests for the first chapter.
 You can use the argument `all` to run all available tests.
+You can also run just the test file for a specific exercise.
+    To do so, use the argument `chapter{n}-{exercise-name}`.
+    For example: to run the chapter1 base tests (corresponding file name `chapter1-base-tests.md`),
+    use the argument `chapter1-base`. To run the chapter1 file tests (corresponding file name `chapter1-exercise-file-urls-tests.md`),
+    use the argument `chapter1-file-urls`
 The output of the script is [doctest](https://docs.python.org/3/library/doctest.html) 
     output for each markdown file for the current chapter followed by a 
     summary of which files contain failed tests.
