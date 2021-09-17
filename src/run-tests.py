@@ -28,6 +28,12 @@ CURRENT_TESTS = {
                   "chapter3-exercise-soft-hyphens-tests.md",
                   "chapter3-exercise-small-caps-tests.md",
                   ],
+    "chapter4" : ["chapter4-base-tests.md",
+                  "chapter4-exercise-comments-tests.md",
+                  "chapter4-exercise-paragraphs-tests.md",
+                  "chapter4-exercise-scripts-tests.md",
+                  "chapter4-exercise-quoted-attributes-tests.md",
+                  ],
 }
 
 all_tests = list()
