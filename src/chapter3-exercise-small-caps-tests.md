@@ -24,7 +24,7 @@ All characters that are not lowercase should use the normal font, and the
 
     >>> test_layout("<abbr>1234 ABCD</abbr>") #doctest: +NORMALIZE_WHITESPACE
     [(13.0, 21.0, '1234', Font size=16 weight=normal slant=roman style=None),
-    (157.0, 21.0, 'ABCD', Font size=16 weight=normal slant=roman style=None)]
+     (93.0, 21.0, 'ABCD', Font size=16 weight=normal slant=roman style=None)]
 
 Combining the two we get small caps.
 Runs of characters in a word that use the same font are presented using single 
@@ -32,10 +32,10 @@ Runs of characters in a word that use the same font are presented using single
 
     >>> test_layout("<abbr>Small Caps</abbr>") #doctest: +NORMALIZE_WHITESPACE
     [(13.0, 21.0, 'S', Font size=16 weight=normal slant=roman style=None), 
-     (29.0, 27.0, 'MALL', Font size=8 weight=bold slant=roman style=None),
-     (125.0, 21.0, 'C', Font size=16 weight=normal slant=roman style=None),
-     (141.0, 27.0, 'APS', Font size=8 weight=bold slant=roman style=None)]
- 
+     (29.0, 27.0, 'MALL', Font size=8 weight=bold slant=roman style=None), 
+     (77.0, 21.0, 'C', Font size=16 weight=normal slant=roman style=None), 
+     (93.0, 27.0, 'APS', Font size=8 weight=bold slant=roman style=None)]
+
  Other text should not interfere with the small caps text.
  
     >>> test_layout("It's like YELLING <abbr>Quietly</abbr>") #doctest: +NORMALIZE_WHITESPACE
