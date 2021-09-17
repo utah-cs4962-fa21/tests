@@ -240,6 +240,17 @@ class MockFont:
             return all[name]
         return all
 
+    def cget(self, option):
+        if option == "size":
+            return self.size
+        if option == "weight":
+            return self.weight
+        if option == "slant":
+            return self.slant
+        if option == "style":
+            return self.style
+        assert False, f"bad option: {option}"
+    
     def __repr__(self):
         return "Font size={} weight={} slant={} style={}".format(
             self.size, self.weight, self.slant, self.style)
