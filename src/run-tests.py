@@ -39,7 +39,7 @@ CURRENT_TESTS = {
 all_tests = list()
 specific_file_tests = {}
 
-''' 
+'''
 add option to run all tests by running script w/ argval 'all',
 and add option to run individual test files by name (removing '-exercise-' infix substring if present)
 '''
