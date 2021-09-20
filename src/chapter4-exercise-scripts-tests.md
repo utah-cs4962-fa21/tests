@@ -41,6 +41,8 @@ Similarly, HTML tags in a script should just be considered part of the text
          <script>
            ' <br> <body> </head> '
 
+The script should end only with a complete end script tag.
+
     >>> test_parse("<script> <script> </script>")
      <html>
        <head>
@@ -52,3 +54,15 @@ Similarly, HTML tags in a script should just be considered part of the text
        <head>
          <script>
            ' /script> '
+
+    >>> test_parse("<script> </scriptfoo </script>")
+     <html>
+       <head>
+         <script>
+           ' </scriptfoo '
+
+    >>> test_parse('<script> "</scri" "pt>" </script>')
+     <html>
+       <head>
+         <script>
+           ' "</scri" "pt>" '

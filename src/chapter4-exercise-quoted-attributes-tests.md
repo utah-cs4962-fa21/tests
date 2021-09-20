@@ -31,6 +31,17 @@ The issue when adding spaces to an attribute is how the text is split into
        <body>
          <div foo="bar baz">
 
+    >>> test_parse('<h1 foo="bar\'s baz"></h1>')
+     <html>
+       <body>
+         <h1 foo="bar's baz">
+
+    >>> test_parse("<div a='b\"c'></div>")
+     <html>
+       <body>
+         <div a="b"c">
+
+
 Allowing the greater than symbol in a quoted attribute requires the additional 
   states mentioned in the exercise.
 
@@ -38,3 +49,30 @@ Allowing the greater than symbol in a quoted attribute requires the additional
      <html>
        <body>
          <br confusing="why does a <br> have an attribute?">
+
+There are some edge cases that should be handled
+
+    >>> test_parse('<div foo="asdf"bgefs>')
+     <html>
+       <body>
+         <div foo="asdf" bgefs="">
+
+    >>> test_parse('<div =foo>')
+     <html>
+       <body>
+         <div =foo="">
+
+    >>> test_parse('<div=foo>')
+     <html>
+       <body>
+         <div=foo>
+
+    >>> test_parse('<div =foo=bar>')
+     <html>
+       <body>
+         <div =foo="bar">
+
+    >>> test_parse('<div a=b=c>')
+     <html>
+       <body>
+         <div a="b=c">

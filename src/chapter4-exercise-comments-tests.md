@@ -14,6 +14,7 @@ Check: is `<!-->` a comment, or does it just start one?
 
 Testing boilerplate:
 
+    >>> import test 
     >>> import browser
     >>> def test_parse(text):
     ...     parser = browser.HTMLParser(text)
@@ -64,3 +65,16 @@ This allows HTML to be commented-out.
      <html>
        <body>
          'sed'
+
+There are some edge cases to take care of.
+
+    >>> test.errors(test_parse, "<!-->foo")
+    True
+    
+    >>> test.errors(test_parse, "<!--->bar")
+    True
+
+    >>> test_parse("<!---->baz")
+     <html>
+       <body>
+         'baz'
