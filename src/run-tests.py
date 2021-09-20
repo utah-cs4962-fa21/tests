@@ -5,6 +5,7 @@ import argparse
 import doctest
 import os
 import sys
+import re
 
 sys.path.append(os.getcwd())
 
@@ -36,10 +37,23 @@ CURRENT_TESTS = {
 }
 
 all_tests = list()
+specific_file_tests = {}
+
+'''
+add option to run all tests by running script w/ argval 'all',
+and add option to run individual test files by name (removing '-exercise-' infix substring if present)
+'''
 for tests in CURRENT_TESTS.values():
     all_tests.extend(tests)
+
+    for test in tests:
+        arg_val = re.sub(r'-exercise', '', test).removesuffix('-tests.md')
+        specific_file_tests[arg_val] = [test]
+
 CURRENT_TESTS["all"] = all_tests
-    
+
+CURRENT_TESTS |= specific_file_tests
+
 
 def run_doctests(files):
     mapped_results = dict()
