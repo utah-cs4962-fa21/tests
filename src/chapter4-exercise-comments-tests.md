@@ -68,13 +68,22 @@ This allows HTML to be commented-out.
 
 There are some edge cases to take care of.
 
-    >>> test.errors(test_parse, "<!-->foo")
-    True
+    >>> test_parse("a<!-->foo")
+     <html>
+       <body>
+         'a'
     
-    >>> test.errors(test_parse, "<!--->bar")
-    True
+    >>> test_parse("b<!--->bar")
+     <html>
+       <body>
+         'b'
 
     >>> test_parse("<!---->baz")
      <html>
        <body>
          'baz'
+
+    >>> test_parse("<!-- foo ->-> bar -->thing")
+     <html>
+       <body>
+         'thing'
