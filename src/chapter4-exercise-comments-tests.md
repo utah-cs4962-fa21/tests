@@ -83,6 +83,11 @@ There are some edge cases to take care of.
        <body>
          'baz'
 
+    >>> test_parse("c<!-- foo ->-> bar --thing")
+     <html>
+       <body>
+         'c'
+
     >>> test_parse("<!-- foo ->-> bar -->thing")
      <html>
        <body>
