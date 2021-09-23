@@ -47,7 +47,8 @@ for tests in CURRENT_TESTS.values():
     all_tests.extend(tests)
 
     for test in tests:
-        arg_val = re.sub(r'-exercise', '', test).removesuffix('-tests.md')
+        arg_val = re.sub(r'-exercise', '', test)
+        arg_val = re.sub(r'-tests.md', '', arg_val)
         specific_file_tests[arg_val] = [test]
 
 CURRENT_TESTS["all"] = all_tests
