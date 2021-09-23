@@ -32,7 +32,7 @@ CURRENT_TESTS = {
                   "chapter4-exercise-comments-tests.md",
                   "chapter4-exercise-paragraphs-tests.md",
                   "chapter4-exercise-scripts-tests.md",
-                  "chapter4-exercise-quoted-attributes-tests.md",
+                  #"chapter4-exercise-quoted-attributes-tests.md",
                   ],
 }
 
