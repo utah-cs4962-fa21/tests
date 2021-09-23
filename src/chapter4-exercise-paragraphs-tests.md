@@ -11,6 +11,7 @@ Change the parser so that a document like `<p>hello<p>world</p>` results in two
 
 Testing boilerplate:
 
+    >>> import test
     >>> import browser
     >>> def test_parse(text):
     ...     parser = browser.HTMLParser(text)
