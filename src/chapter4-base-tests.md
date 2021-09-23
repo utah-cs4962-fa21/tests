@@ -4,6 +4,7 @@ Tests fsor WBE Chapter 4
 Chapter 4 (Constructing a Document Tree) adds support for the document tree
 (i.e. the DOM).  This file contains tests for the additional functionality.
 
+    >>> import test
     >>> import browser
     >>> def test_parse(text):
     ...     parser = browser.HTMLParser(text)
