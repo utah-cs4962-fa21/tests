@@ -11,6 +11,7 @@ Hint: the current lexer is a finite state machine, with two states
 
 Testing boilerplate:
 
+    >>> import test
     >>> import browser
     >>> def test_parse(text):
     ...     parser = browser.HTMLParser(text)
