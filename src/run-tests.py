@@ -34,6 +34,12 @@ CURRENT_TESTS = {
                   "chapter4-exercise-scripts-tests.md",
                   #"chapter4-exercise-quoted-attributes-tests.md",
                   ],
+    "chapter5" : ["chapter5-base-tests.md",
+                  "chapter5-exercise-hidden-head-tests.md",
+                  "chapter5-exercise-bullets-tests.md",
+                  "chapter5-exercise-scrollbar-tests.md",
+                  # "chapter5-exercise-links-bar-tests.md",
+                  ],
 }
 
 all_tests = list()

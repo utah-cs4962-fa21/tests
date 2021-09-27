@@ -23,18 +23,16 @@ Set up the URL and web page, this is the content that we will be examining.
     >>> this_browser = browser.Browser()
     >>> this_browser.load(url)
 
-The layout tree should only contain one inline layout object, corresponding to
+The layout tree should only contain two inline layout objects, corresponding to
   the body of the web page.
          
     >>> browser.print_tree(this_browser.document)
      DocumentLayout()
        BlockLayout(x=13, y=18, width=774, height=40.0)
          BlockLayout(x=13, y=18, width=774, height=40.0)
-           InlineLayout(x=13, y=18, width=774, height=20.0)
-           InlineLayout(x=13, y=38.0, width=774, height=20.0)
+           InlineLayout(x=39, y=18, width=748, height=20.0)
+           InlineLayout(x=39, y=38.0, width=748, height=20.0)
 
-To force the `<li>` onto its own line be sure to flush at the opening and 
-  closing of `li` elements.
 The text inside the `li` should be indented over by `2 * HSTEP`.
 The bullet itself should be a black rectangle, 4 by 4 pixels, centered 
   vertically on the line and with a horizontal center one `HSTEP` from the 
@@ -43,10 +41,21 @@ The `DrawRect` call should in the `paint` function's output display list before
   the text of the `li`.
   
     >>> this_browser.display_list #doctest: +NORMALIZE_WHITESPACE
-    [DrawRect(top=26.0 left=24 bottom=30.0 right=28 color=black), 
+    [DrawRect(top=25.0 left=24 bottom=29.0 right=28 color=black), 
      DrawText(top=21.0 left=39 bottom=37.0 text=hello font=Font size=16 weight=normal slant=roman style=None), 
-     DrawRect(top=46.0 left=24 bottom=50.0 right=28 color=black), 
+     DrawRect(top=45.0 left=24 bottom=49.0 right=28 color=black), 
      DrawText(top=41.0 left=39 bottom=57.0 text=world font=Font size=16 weight=normal slant=roman style=None)]
 
+It is possible that multiple lines are contained in a `li`, and in these
+  cases all lines should be indented and the bullet should be vertically 
+  centered on the first line.
 
-TODO <li> hello <br> world </li>
+    >>> url = 'http://test.test/chapter5_example5'
+    >>> content = "<html><body><li>hello<br>world</li></body></html>"
+    >>> test.socket.respond_200(url, content)
+    >>> this_browser = browser.Browser()
+    >>> this_browser.load(url)
+    >>> this_browser.display_list #doctest: +NORMALIZE_WHITESPACE
+    [DrawRect(top=25.0 left=24 bottom=29.0 right=28 color=black), 
+     DrawText(top=21.0 left=39 bottom=37.0 text=hello font=Font size=16 weight=normal slant=roman style=None), 
+     DrawText(top=41.0 left=39 bottom=57.0 text=world font=Font size=16 weight=normal slant=roman style=None)]
