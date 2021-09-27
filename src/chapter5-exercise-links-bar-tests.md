@@ -72,12 +72,15 @@ Next, let's test that a proper links bar has a `lightgray` background:
      DrawText(top=21.0 left=13 bottom=37.0 text=A font=Font size=16 weight=normal slant=roman style=None),
      DrawText(top=41.0 left=13 bottom=57.0 text=B font=Font size=16 weight=normal slant=roman style=None)]
 
-This should work even if the page has multiple nav bars:
+This should work even if the page has multiple links bars. In this
+case, I also write the second links bar `<nav class=links>`, without
+the quotes. This should still work because the HTML parser treats both
+syntaxes the same.
 
     >>> nodes = browser.HTMLParser("""<!doctype html>
     ... <nav class="links">A</nav>
     ... <p>B</p>
-    ... <nav class="links">C</nav>
+    ... <nav class=links>C</nav>
     ... """).parse()
     >>> browser.print_tree(nodes)
      <html>
