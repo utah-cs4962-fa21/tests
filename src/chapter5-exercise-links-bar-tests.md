@@ -7,7 +7,7 @@ Tests for WBE Chapter 5 Exercise `Links Bar`
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
     >>> _ = test.patch_canvas()
-    >>> import lab5 as browser
+    >>> import browser
 
 The links bar in each chapter is enclosed in `<nav class="links">`.
 Importantly, normal `<nav>` elements are *not* the links bar, and

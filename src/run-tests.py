@@ -38,7 +38,7 @@ CURRENT_TESTS = {
                   "chapter5-exercise-hidden-head-tests.md",
                   "chapter5-exercise-bullets-tests.md",
                   "chapter5-exercise-scrollbar-tests.md",
-                  # "chapter5-exercise-links-bar-tests.md",
+                  "chapter5-exercise-links-bar-tests.md",
                   ],
 }
 
