@@ -176,7 +176,8 @@ class MockCanvas:
         pass
 
     def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None):
-        pass
+        print("create_rectangle: x1={} y1={} x2={} y2={} width={} fill={}".format(
+            x1, y1, x2, y2, width, repr(fill)))
 
     def create_line(self, x1, y1, x2, y2):
         pass

@@ -34,6 +34,12 @@ CURRENT_TESTS = {
                   "chapter4-exercise-scripts-tests.md",
                   #"chapter4-exercise-quoted-attributes-tests.md",
                   ],
+    "chapter5" : ["chapter5-base-tests.md",
+                  "chapter5-exercise-hidden-head-tests.md",
+                  "chapter5-exercise-bullets-tests.md",
+                  "chapter5-exercise-scrollbar-tests.md",
+                  "chapter5-exercise-links-bar-tests.md",
+                  ],
 }
 
 all_tests = list()
@@ -67,7 +73,7 @@ def parse_arguments(argv):
     parser = argparse.ArgumentParser(description='WBE test runner')
     parser.add_argument("chapter",
                         nargs="?",
-                        default="chapter4",
+                        default="chapter5",
                         choices=list(CURRENT_TESTS),
                         help="Which chapter's tests to run")
     args = parser.parse_args(argv[1:])
