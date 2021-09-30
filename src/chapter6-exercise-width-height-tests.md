@@ -41,7 +41,7 @@ Width
     >>> browser.print_tree(this_browser.document)
      DocumentLayout()
        BlockLayout(x=13, y=18, width=774, height=15.0)
-         BlockLayout(x=13, y=18, width=1000, height=15.0)
+         BlockLayout(x=13, y=18, width=774, height=15.0)
            InlineLayout(x=13, y=18, width=1000, height=15.0)
 
 Height
@@ -67,7 +67,7 @@ Both
     >>> browser.print_tree(this_browser.document)
      DocumentLayout()
        BlockLayout(x=13, y=18, width=774, height=200.0)
-         BlockLayout(x=13, y=18, width=900, height=200.0)
+         BlockLayout(x=13, y=18, width=774, height=200.0)
            InlineLayout(x=13, y=18, width=900, height=200.0)
 
 Width is negative
@@ -93,7 +93,7 @@ Width is smaller than normal, and wraps text
     >>> browser.print_tree(this_browser.document)
      DocumentLayout()
        BlockLayout(x=13, y=18, width=774, height=15.0)
-         BlockLayout(x=13, y=18, width=100, height=15.0)
+         BlockLayout(x=13, y=18, width=744, height=15.0)
            InlineLayout(x=13, y=18, width=100, height=15.0)
 
 
