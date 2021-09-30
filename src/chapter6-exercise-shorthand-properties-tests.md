@@ -15,3 +15,12 @@ Add shorthand properties to your parser.
     >>> _ = test.ssl.patch().start()
     >>> import browser
 
++ always give all four
+must modify parser and expand in parser
+
+
+only check font shorthand
+
+single rule with multple properties
+
+`p { font: foo bar baz bam; font-family: yolo; }`

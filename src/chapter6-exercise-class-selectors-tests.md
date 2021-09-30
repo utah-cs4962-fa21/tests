@@ -16,3 +16,20 @@ If you’ve implemented them correctly, you should see code blocks in this book
     >>> _ = test.ssl.patch().start()
     >>> import browser
 
+parsing: check that .main is parsed as selector
+ClassSelectgor("b").matches(
+  Element("p", None, {"class": "a b"}))
+  
+.a ~ a b
+.b ~ a b
+.a !~ cat
+  
+check that element with mutple classes is matched correctly 
+
+`.a p` mixed descendant
+
+sort selectors to get priority order
+p
+h1 b
+.foo
+.foo p

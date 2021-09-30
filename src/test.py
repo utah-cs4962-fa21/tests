@@ -225,11 +225,12 @@ def unpatch_canvas():
     tkinter.Canvas = original_tkinter_canvas
 
 class MockFont:
-    def __init__(self, size=None, weight=None, slant=None, style=None):
+    def __init__(self, size=None, weight=None, slant=None, style=None, family=None):
         self.size = size
         self.weight = weight
         self.slant = slant
         self.style = style
+        self.family = family
 
     def measure(self, word):
         return self.size * len(word.replace("\xad", ""))
@@ -250,11 +251,17 @@ class MockFont:
             return self.slant
         if option == "style":
             return self.style
+        if option == "family":
+            return self.family
         assert False, f"bad option: {option}"
     
     def __repr__(self):
-        return "Font size={} weight={} slant={} style={}".format(
-            self.size, self.weight, self.slant, self.style)
+        if self.family:
+            return "Font size={} weight={} slant={} style={} family={}".format(
+                self.size, self.weight, self.slant, self.style, self.family)
+        else:
+            return "Font size={} weight={} slant={} style={}".format(
+                self.size, self.weight, self.slant, self.style)
 
 tkinter.font.Font = MockFont
 

@@ -156,18 +156,34 @@ Testing style
     >>> html = browser.Element("html", {}, None)
     >>> body = browser.Element("body", {}, html)
     >>> div = browser.Element("div", {}, body)
+    >>> def print_style(style):
+    ...     for key in sorted(style):
+    ...         if key == "font-family": continue
+    ...         val = style[key]
+    ...         print(f"{key}: {val}")
 
 The default styles for many elements are the same:
 
     >>> browser.style(html, [])
-    >>> html.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(html.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
+
     >>> browser.style(body, [])
-    >>> body.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(body.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
+
     >>> browser.style(div, [])
-    >>> div.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(div.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
 
     >>> rules = browser.CSSParser(
     ... "html { font-size: 10px} body { font-size: 90% } \
@@ -176,69 +192,129 @@ The default styles for many elements are the same:
 Percentage font sizes work as expected:
 
     >>> browser.style(html, rules)
-    >>> html.style
-    {'font-size': '10px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(html.style)
+    color: black
+    font-size: 10px
+    font-style: normal
+    font-weight: normal
 
     >>> browser.style(body, rules)
-    >>> body.style
-    {'font-size': '9.0px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(body.style)
+    color: black
+    font-size: 9.0px
+    font-style: normal
+    font-weight: normal
 
     >>> browser.style(div, rules)
-    >>> div.style
-    {'font-size': '8.1px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(div.style)
+    color: black
+    font-size: 8.1px
+    font-style: normal
+    font-weight: normal
+
 
 Inherited properties work (`font-weight` is an inherited property):
 
     >>> rules = browser.CSSParser("html { font-weight: bold}").parse()
     >>> browser.style(html, rules)
-    >>> html.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'bold', 'color': 'black'}
+    >>> print_style(html.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: bold
+
     >>> browser.style(body, rules)
-    >>> body.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'bold', 'color': 'black'}
+    >>> print_style(body.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: bold
+
     >>> browser.style(div, rules)
-    >>> div.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'bold', 'color': 'black'}
+    >>> print_style(div.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: bold
+
 
 Other properties do not:
 
     >>> rules = browser.CSSParser("html { background-color: green}").parse()
     >>> browser.style(html, rules)
-    >>> html.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black', 'background-color': 'green'}
+    >>> print_style(html.style)
+    background-color: green
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
+
     >>> browser.style(body, rules)
-    >>> body.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(body.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
+
     >>> browser.style(div, rules)
-    >>> div.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(div.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
+
 
 Descendant selectors work:
 
     >>> rules = browser.CSSParser("html div { background-color: green}").parse()
     >>> browser.style(html, rules)
-    >>> html.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(html.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
+
     >>> browser.style(body, rules)
-    >>> body.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(body.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
+
     >>> browser.style(div, rules)
-    >>> div.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black', 'background-color': 'green'}
+    >>> print_style(div.style)
+    background-color: green
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
+
 
 Priorities work (descendant selectors high higher priority than tag selectors):
 
     >>> rules = browser.CSSParser(
     ... "html div { background-color: green} div { background-color: blue").parse()
     >>> browser.style(html, rules)
-    >>> html.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(html.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
+
     >>> browser.style(body, rules)
-    >>> body.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black'}
+    >>> print_style(body.style)
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
+
     >>> browser.style(div, rules)
-    >>> div.style
-    {'font-size': '16px', 'font-style': 'normal', 'font-weight': 'normal', 'color': 'black', 'background-color': 'green'}
+    >>> print_style(div.style)
+    background-color: green
+    color: black
+    font-size: 16px
+    font-style: normal
+    font-weight: normal
 
     >>> url2 = 'http://test.test/chapter6_example2'
     >>> test.socket.respond(url2, b"HTTP/1.0 200 OK\r\n" +
