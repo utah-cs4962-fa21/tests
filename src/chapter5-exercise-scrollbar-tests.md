@@ -19,7 +19,7 @@ Hide the scrollbar if the whole document fits onscreen.
 Resize the window and set up the URL and web page, this is the content that we will be examining.
 
 
-    >>> url = 'http://test.test/chapter5_example5'
+    >>> url = 'http://test.test/chapter5_example6'
     >>> content = "<br>".join(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"])
     >>> test.socket.respond_200(url, content)
 
