@@ -40,6 +40,12 @@ CURRENT_TESTS = {
                   "chapter5-exercise-scrollbar-tests.md",
                   "chapter5-exercise-links-bar-tests.md",
                   ],
+    "chapter6" : ["chapter6-base-tests.md",
+                  "chapter6-exercise-fonts-tests.md",
+                  "chapter6-exercise-width-height-tests.md",
+                  "chapter6-exercise-class-selectors-tests.md",
+                  "chapter6-exercise-shorthand-properties-tests.md",
+                  ],
 }
 
 all_tests = list()
