@@ -55,15 +55,15 @@ This class should be used when parsing CSS.
 Class selectors can also be used as part of descendant selectors.
 
     >>> test_parse(".a p { font-size:10px ;}")
-    DescendantSelector(ancestor=ClassSelector(html_class=a, priority=10), descendant=TagSelector(tag=p, priority=1), priority=11
+    DescendantSelector(ancestor=ClassSelector(html_class=a, priority=10), descendant=TagSelector(tag=p, priority=1), priority=11)
       font-size: 10px
 
     >>> test_parse("p .a { color:blue ;}")
-    DescendantSelector(ancestor=TagSelector(tag=p, priority=1), descendant=ClassSelector(html_class=a, priority=10), priority=11
+    DescendantSelector(ancestor=TagSelector(tag=p, priority=1), descendant=ClassSelector(html_class=a, priority=10), priority=11)
       color: blue
 
     >>> test_parse(".a .b { font-weight:bold ;}")
-    DescendantSelector(ancestor=ClassSelector(html_class=a, priority=10), descendant=ClassSelector(html_class=b, priority=10), priority=20
+    DescendantSelector(ancestor=ClassSelector(html_class=a, priority=10), descendant=ClassSelector(html_class=b, priority=10), priority=20)
       font-weight: bold
 
 Selector priority should be correct.
@@ -75,10 +75,10 @@ The `test_parse` function sorts by priority.
     ...          + " .foo p { color:green ;}")
     TagSelector(tag=p, priority=1)
       color: red
-    DescendantSelector(ancestor=TagSelector(tag=h1, priority=1), descendant=TagSelector(tag=b, priority=1), priority=2
+    DescendantSelector(ancestor=TagSelector(tag=h1, priority=1), descendant=TagSelector(tag=b, priority=1), priority=2)
       color: orange
     ClassSelector(html_class=foo, priority=10)
       color: yellow
-    DescendantSelector(ancestor=ClassSelector(html_class=foo, priority=10), descendant=TagSelector(tag=p, priority=1), priority=11
+    DescendantSelector(ancestor=ClassSelector(html_class=foo, priority=10), descendant=TagSelector(tag=p, priority=1), priority=11)
       color: green
 

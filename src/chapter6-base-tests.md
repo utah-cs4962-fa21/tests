@@ -62,10 +62,10 @@ A descendant selector stores its ancestor and descendant as TagSelectors,
 with a priority that sums them.
 
     >>> browser.CSSParser("div span { foo: bar }").parse()
-    [(DescendantSelector(ancestor=TagSelector(tag=div, priority=1), descendant=TagSelector(tag=span, priority=1), priority=2, {'foo': 'bar'})]
+    [(DescendantSelector(ancestor=TagSelector(tag=div, priority=1), descendant=TagSelector(tag=span, priority=1), priority=2), {'foo': 'bar'})]
 
     >>> browser.CSSParser("div span h1 { foo: bar }").parse()
-    [(DescendantSelector(ancestor=DescendantSelector(ancestor=TagSelector(tag=div, priority=1), descendant=TagSelector(tag=span, priority=1), priority=2, descendant=TagSelector(tag=h1, priority=1), priority=3, {'foo': 'bar'})]
+    [(DescendantSelector(ancestor=DescendantSelector(ancestor=TagSelector(tag=div, priority=1), descendant=TagSelector(tag=span, priority=1), priority=2), descendant=TagSelector(tag=h1, priority=1), priority=3), {'foo': 'bar'})]
 
 Multiple rules can be present.
 
