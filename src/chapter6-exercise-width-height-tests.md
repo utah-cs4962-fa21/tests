@@ -16,9 +16,9 @@ These can either be a pixel value, which directly sets the width or height of
 
 + negative heights mean auto (technically a syntax error)
 
-All these bigger, just look at layout tree
 
-No spec
+
+With no width or height properties the browser should perform the existing layout.
 
     >>> url = 'http://test.test/chapter6_example5'
     >>> test.socket.respond_200(url, 
@@ -31,7 +31,7 @@ No spec
          BlockLayout(x=13, y=18, width=774, height=15.0)
            InlineLayout(x=13, y=18, width=774, height=15.0)
 
-Width
+Specifying width should set the width of the element.
 
     >>> url = 'http://test.test/chapter6_example6'
     >>> test.socket.respond_200(url, 
@@ -42,9 +42,9 @@ Width
      DocumentLayout()
        BlockLayout(x=13, y=18, width=774, height=15.0)
          BlockLayout(x=13, y=18, width=774, height=15.0)
-           InlineLayout(x=13, y=18, width=1000, height=15.0)
+           InlineLayout(x=13, y=18, width=1000.0, height=15.0)
 
-Height
+Specifying height changes the element's hight, which will in turn cascade up the tree.
 
     >>> url = 'http://test.test/chapter6_example7'
     >>> test.socket.respond_200(url, 
@@ -57,20 +57,20 @@ Height
          BlockLayout(x=13, y=18, width=774, height=100.0)
            InlineLayout(x=13, y=18, width=774, height=100.0)
 
-Both
+You should be able to set both simultaneously.
 
     >>> url = 'http://test.test/chapter6_example8'
     >>> test.socket.respond_200(url, 
-    ...   body='<div style="width:900px height:200px">Set both</div>')
+    ...   body='<div style="width:900px;height:200px">Set both</div>')
     >>> this_browser = browser.Browser()
     >>> this_browser.load(url)
     >>> browser.print_tree(this_browser.document)
      DocumentLayout()
        BlockLayout(x=13, y=18, width=774, height=200.0)
          BlockLayout(x=13, y=18, width=774, height=200.0)
-           InlineLayout(x=13, y=18, width=900, height=200.0)
+           InlineLayout(x=13, y=18, width=900.0, height=200.0)
 
-Width is negative
+If a value is negative you should use the automatic layout.
 
     >>> url = 'http://test.test/chapter6_example9'
     >>> test.socket.respond_200(url, 
@@ -83,17 +83,18 @@ Width is negative
          BlockLayout(x=13, y=18, width=774, height=15.0)
            InlineLayout(x=13, y=18, width=774, height=15.0)
 
-Width is smaller than normal, and wraps text
+Make sure that text wrapping still works.
+In this example the height of the `div` is due to text wrapping.
 
     >>> url = 'http://test.test/chapter6_example10'
     >>> test.socket.respond_200(url, 
-    ...   body='<div style="width:100">Wrap me since width is set</div>')
+    ...   body='<div style="width:100px">Wrap me since width is set</div>')
     >>> this_browser = browser.Browser()
     >>> this_browser.load(url)
     >>> browser.print_tree(this_browser.document)
      DocumentLayout()
-       BlockLayout(x=13, y=18, width=774, height=15.0)
-         BlockLayout(x=13, y=18, width=744, height=15.0)
-           InlineLayout(x=13, y=18, width=100, height=15.0)
+       BlockLayout(x=13, y=18, width=774, height=60.0)
+         BlockLayout(x=13, y=18, width=774, height=60.0)
+           InlineLayout(x=13, y=18, width=100.0, height=60.0)
 
 

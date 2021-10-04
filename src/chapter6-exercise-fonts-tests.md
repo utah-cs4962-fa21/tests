@@ -44,7 +44,7 @@ The font for `pre` elements should be "Courier".
     [DrawRect(top=18 left=13 bottom=33.0 right=787 color=gray), 
      DrawText(text=code, font=Font size=12 weight=normal slant=roman style=None family=Courier)]
 
-Inheretence should be handled.
+Inheritance should be handled.
 
     >>> body = ('<p style="font-family:foo">' +
     ...         '<span>A</span>' +
