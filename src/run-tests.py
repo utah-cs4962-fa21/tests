@@ -79,7 +79,7 @@ def parse_arguments(argv):
     parser = argparse.ArgumentParser(description='WBE test runner')
     parser.add_argument("chapter",
                         nargs="?",
-                        default="chapter5",
+                        default="chapter6",
                         choices=list(CURRENT_TESTS),
                         help="Which chapter's tests to run")
     args = parser.parse_args(argv[1:])
