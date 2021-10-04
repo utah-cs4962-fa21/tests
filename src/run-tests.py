@@ -65,7 +65,7 @@ for tests in CURRENT_TESTS.values():
 
 CURRENT_TESTS["all"] = all_tests
 
-CURRENT_TESTS |= specific_file_tests
+CURRENT_TESTS.update(specific_file_tests)
 
 
 def run_doctests(files):

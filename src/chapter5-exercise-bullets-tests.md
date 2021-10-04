@@ -41,9 +41,9 @@ The `DrawRect` call should in the `paint` function's output display list before
   the text of the `li`.
   
     >>> this_browser.display_list #doctest: +NORMALIZE_WHITESPACE
-    [DrawRect(top=25.0 left=24 bottom=29.0 right=28 color=black), 
+    [DrawRect(top=26.0 left=24 bottom=30.0 right=28 color=black), 
      DrawText(top=21.0 left=39 bottom=37.0 text=hello font=Font size=16 weight=normal slant=roman style=None), 
-     DrawRect(top=45.0 left=24 bottom=49.0 right=28 color=black), 
+     DrawRect(top=46.0 left=24 bottom=50.0 right=28 color=black), 
      DrawText(top=41.0 left=39 bottom=57.0 text=world font=Font size=16 weight=normal slant=roman style=None)]
 
 It is possible that multiple lines are contained in a `li`, and in these
@@ -56,6 +56,6 @@ It is possible that multiple lines are contained in a `li`, and in these
     >>> this_browser = browser.Browser()
     >>> this_browser.load(url)
     >>> this_browser.display_list #doctest: +NORMALIZE_WHITESPACE
-    [DrawRect(top=25.0 left=24 bottom=29.0 right=28 color=black), 
+    [DrawRect(top=26.0 left=24 bottom=30.0 right=28 color=black), 
      DrawText(top=21.0 left=39 bottom=37.0 text=hello font=Font size=16 weight=normal slant=roman style=None), 
      DrawText(top=41.0 left=39 bottom=57.0 text=world font=Font size=16 weight=normal slant=roman style=None)]
