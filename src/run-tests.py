@@ -47,10 +47,10 @@ CURRENT_TESTS = {
                   "chapter6-exercise-shorthand-properties-tests.md",
                   ],
     "chapter7" : ["chapter7-base-tests.md",
-                  # "chapter7-exercise--tests.md",
-                  # "chapter7-exercise--tests.md",
-                  # "chapter7-exercise--tests.md",
-                  # "chapter7-exercise--tests.md",
+                  "chapter7-exercise-backspace-tests.md",
+                  "chapter7-exercise-middle-click-tests.md",
+                  "chapter7-exercise-fragments-tests.md",
+                  "chapter7-exercise-bookmarks-tests.md",
                   ],
 }
 
