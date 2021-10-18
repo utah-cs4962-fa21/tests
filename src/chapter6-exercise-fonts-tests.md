@@ -4,13 +4,13 @@ Tests for WBE Chapter 6 Exercise `Fonts`
 Description
 -----------
 
-Implement the font-family property, an inheritable property that names which 
-  font should be used in an element. 
+Implement the font-family property, an inheritable property that names which
+  font should be used in an element.
 Make code fonts use some nice monospaced font like Courier.
 
 
-Please modify the `__repr__` method of your `DrawText` class to contain 
-`return "DrawText(text={}, font={})".format(self.text, self.font)`
+Please modify the `__repr__` method of your `DrawText` class to contain
+`return "DrawText(top={} left={} bottom={} text={} font={})".format(self.top, self.left, self.bottom, self.text, self.font)`
 
     >>> import test
     >>> _ = test.socket.patch().start()
@@ -34,15 +34,14 @@ The default font-family should be "Times".
     font-style: normal
     font-weight: normal
 
-The font for `pre` elements should be "Courier".
+The font for `code` elements should be "Courier".
 
     >>> url = 'http://test.test/chapter6_example3'
-    >>> test.socket.respond_200(url, body="<pre> code </pre>")
+    >>> test.socket.respond_200(url, body="<code> code </code>")
     >>> this_browser = browser.Browser()
     >>> this_browser.load(url)
-    >>> this_browser.display_list #doctest: +NORMALIZE_WHITESPACE
-    [DrawRect(top=18 left=13 bottom=33.0 right=787 color=gray), 
-     DrawText(text=code, font=Font size=12 weight=normal slant=roman style=None family=Courier)]
+    >>> this_browser.display_list
+    [DrawText(top=20.25 left=13 bottom=32.25 text=code font=Font size=12 weight=normal slant=roman style=None family=Courier)]
 
 Inheritance should be handled.
 
@@ -55,5 +54,5 @@ Inheritance should be handled.
     >>> this_browser = browser.Browser()
     >>> this_browser.load(url)
     >>> this_browser.display_list #doctest: +NORMALIZE_WHITESPACE
-    [DrawText(text=A, font=Font size=12 weight=normal slant=roman style=None family=foo), 
-     DrawText(text=B, font=Font size=12 weight=normal slant=roman style=None family=bar)]
+    [DrawText(top=20.25 left=13 bottom=32.25 text=A font=Font size=12 weight=normal slant=roman style=None family=foo),
+     DrawText(top=20.25 left=37 bottom=32.25 text=B font=Font size=12 weight=normal slant=roman style=None family=bar)]
