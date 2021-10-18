@@ -27,7 +27,7 @@ Boilerplate.
     >>> import browser
 
 First we need to set up two pages, where one is a link to the other.
-This is the page lined _to_.
+This is the page linked _to_.
 
     >>> url_dst = 'http://test.test/chapter7-link-dst'
     >>> body_dst = 'Link destination'
