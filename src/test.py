@@ -144,17 +144,29 @@ class SilentTk:
 
 tkinter.Tk = SilentTk
 
+TK_CANVAS_CALLS = list()
 class SilentCanvas:
     def __init__(self, *args, **kwargs):
-        pass
+        global TK_CANVAS_CALLS
+        TK_CANVAS_CALLS = list()
 
     def create_text(self, x, y, text, font=None, anchor=None, fill=None):
-        pass
+        global TK_CANVAS_CALLS
+        if text.isspace():
+            return
+        if font or anchor:
+            TK_CANVAS_CALLS.append("create_text: x={} y={} text={} font={} anchor={}".format(
+                x, y, text, font, anchor))
+        else:
+            TK_CANVAS_CALLS.append("create_text: x={} y={} text={}".format(
+                x, y, text))
 
-    def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None):
-        pass
+    def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None, outline=None):
+        global TK_CANVAS_CALLS
+        TK_CANVAS_CALLS.append("create_rectangle: x1={} y1={} x2={} y2={} width={} fill={}".format(
+            x1, y1, x2, y2, width, repr(fill)))
 
-    def create_line(self, x1, y1, x2, y2):
+    def create_line(self, x1, y1, x2, y2, fill=None):
         pass
 
     def create_oval(self, x1, y1, x2, y2):
@@ -167,7 +179,37 @@ class SilentCanvas:
         pass
 
     def delete(self, v):
-        pass
+        global TK_CANVAS_CALLS
+        assert(v == "all")
+        TK_CANVAS_CALLS = list()
+
+
+def check_bookmark_button(fill_color):
+    rec_calls = [call for call in TK_CANVAS_CALLS
+                 if call.startswith("create_rectangle")]
+    for rec_call in rec_calls:
+        parts = rec_call.split()
+        x1 = float(parts[1].split("=")[1])
+        y1 = float(parts[2].split("=")[1])
+        x2 = float(parts[3].split("=")[1])
+        y2 = float(parts[4].split("=")[1])
+        fill = parts[6].split("=")[1][1:-1]
+
+        if (755 < x1 < 775 and
+            40 < y1 < 60 and
+            780 < x2 < 800 and
+            80 < y2 < 100 and
+            fill == fill_color):
+            return True
+
+    return False
+
+def check_not_bookmarked():
+    return check_bookmark_button("white")
+
+def check_bookmarked():
+    return check_bookmark_button("yellow")
+
 
 tkinter.Canvas = SilentCanvas
 
@@ -175,11 +217,11 @@ class MockCanvas:
     def __init__(self, *args, **kwargs):
         pass
 
-    def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None):
+    def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None, outline=None):
         print("create_rectangle: x1={} y1={} x2={} y2={} width={} fill={}".format(
             x1, y1, x2, y2, width, repr(fill)))
 
-    def create_line(self, x1, y1, x2, y2):
+    def create_line(self, x1, y1, x2, y2, fill=None):
         pass
 
     def create_oval(self, x1, y1, x2, y2):
@@ -188,7 +230,7 @@ class MockCanvas:
     def create_polygon(self, *args, **kwargs):
         pass
 
-    def create_text(self, x, y, text, font=None, anchor=None):
+    def create_text(self, x, y, text, font=None, anchor=None, fill=None):
         if text.isspace():
             return
         if font or anchor:
@@ -206,6 +248,42 @@ class MockCanvas:
 
 original_tkinter_canvas = tkinter.Canvas
 
+class SkipChromeCanvas:
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def create_text(self, x, y, text, font=None, anchor=None, fill=None):
+        if text.isspace() or y < 100:
+            return
+        if font or anchor:
+            print("create_text: x={} y={} text={} font={} anchor={}".format(
+                x, y, text, font, anchor))
+        else:
+            print("create_text: x={} y={} text={}".format(
+                x, y, text))
+
+
+    def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None, outline=None):
+        if y1 > 100:
+            print("create_rectangle: x1={} y1={} x2={} y2={} width={} fill={}".format(
+                x1, y1, x2, y2, width, repr(fill)))
+
+
+    def create_line(self, x1, y1, x2, y2, fill=None):
+        pass
+
+    def create_oval(self, x1, y1, x2, y2):
+        pass
+
+    def create_polygon(self, *args, **kwargs):
+        pass
+
+    def pack(self, expand=None, fill=None):
+        pass
+
+    def delete(self, v):
+        pass
+
 
 class resize_event:
     def __init__(self, width, height):
@@ -217,9 +295,26 @@ class mousewheel_event:
         self.delta = delta
         self.num = "??"
 
+class key_event:
+    def __init__(self, char):
+        self.char = char
+
+class backspace_event:
+    def __init__(self):
+        pass
+
+class enter_event:
+    def __init__(self):
+        pass
 
 def patch_canvas():
     tkinter.Canvas = MockCanvas
+
+def patch_skip_chrome_canvas():
+    tkinter.Canvas = SkipChromeCanvas
+
+def patch_silent_canvas():
+    tkinter.Canvas = SilentCanvas
 
 def unpatch_canvas():
     tkinter.Canvas = original_tkinter_canvas
@@ -254,7 +349,7 @@ class MockFont:
         if option == "family":
             return self.family
         assert False, f"bad option: {option}"
-    
+
     def __repr__(self):
         if self.family:
             return "Font size={} weight={} slant={} style={} family={}".format(
