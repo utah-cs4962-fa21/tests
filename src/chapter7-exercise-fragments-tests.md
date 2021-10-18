@@ -49,8 +49,8 @@ Test loading a url with a fragment.
     create_text: x=13 y=177.25 text=b font=Font size=12 weight=normal slant=roman style=None anchor=nw
     create_text: x=13 y=192.25 text=b font=Font size=12 weight=normal slant=roman style=None anchor=nw
 
-    >>> this_browser.tabs
-    [Tab(history=['http://test.test/chapter7-fragment1#target'])]
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-fragment1#target'
 
     >>> this_browser.tabs[0].scroll
     258.0
@@ -86,13 +86,15 @@ Test clicking on a link with an absolute path including a fragment.
     create_text: x=13 y=177.25 text=d font=Font size=12 weight=normal slant=roman style=None anchor=nw
     create_text: x=13 y=192.25 text=d font=Font size=12 weight=normal slant=roman style=None anchor=nw
 
-    >>> this_browser.tabs
-    [Tab(history=['http://test.test/chapter7-fragment3', 'http://test.test/chapter7-fragment3#fullpath'])]
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-fragment3#fullpath'
 
     >>> this_browser.tabs[0].scroll
     333.0
 
-Test clicking on a link with a relative fragment
+Test clicking on a link with a relative fragment.
+This should only scroll the existing page, and not reload the contents of the
+  page.
 
     >>> url = 'http://test.test/chapter7-fragment4'
     >>> body = ('<a href="#relpath">Relative path link</a>'
@@ -113,6 +115,12 @@ Test clicking on a link with a relative fragment
     create_text: x=13 y=180.25 text=e font=Font size=12 weight=normal slant=roman style=None anchor=nw
     create_text: x=13 y=195.25 text=e font=Font size=12 weight=normal slant=roman style=None anchor=nw
 
+To check that the page is not requested again change the server's response.
+
+    >>> test.socket.respond_200(url, "Do not load me")
+
+Click on the relative fragment.
+
     >>> this_browser.handle_click(test.Event(14, 121))
     create_text: x=13 y=102.25 text=Relative font=Font size=12 weight=normal slant=roman style=None anchor=nw
     create_text: x=121 y=102.25 text=path font=Font size=12 weight=normal slant=roman style=None anchor=nw
@@ -124,8 +132,8 @@ Test clicking on a link with a relative fragment
     create_text: x=13 y=177.25 text=f font=Font size=12 weight=normal slant=roman style=None anchor=nw
     create_text: x=13 y=192.25 text=f font=Font size=12 weight=normal slant=roman style=None anchor=nw
 
-    >>> this_browser.tabs
-    [Tab(history=['http://test.test/chapter7-fragment4', 'http://test.test/chapter7-fragment4#relpath'])]
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-fragment4#relpath'
 
     >>> this_browser.tabs[0].scroll
     318.0
@@ -159,8 +167,8 @@ If the fragment does not exist then don't change the scroll position.
     create_text: x=13 y=180.25 text=g font=Font size=12 weight=normal slant=roman style=None anchor=nw
     create_text: x=13 y=195.25 text=g font=Font size=12 weight=normal slant=roman style=None anchor=nw
 
-    >>> this_browser.tabs
-    [Tab(history=['http://test.test/chapter7-fragment5', 'http://test.test/chapter7-fragment5#heyo'])]
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-fragment5#heyo'
 
     >>> this_browser.tabs[0].scroll
     0
@@ -198,8 +206,8 @@ Clicking a fragment link when a fragment url is already loaded should
     create_text: x=13 y=177.25 text=j font=Font size=12 weight=normal slant=roman style=None anchor=nw
     create_text: x=13 y=192.25 text=j font=Font size=12 weight=normal slant=roman style=None anchor=nw
 
-    >>> this_browser.tabs
-    [Tab(history=['http://test.test/chapter7-fragment6#nothere', 'http://test.test/chapter7-fragment6#relpath'])]
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-fragment6#relpath'
 
     >>> this_browser.tabs[0].scroll
     543.0

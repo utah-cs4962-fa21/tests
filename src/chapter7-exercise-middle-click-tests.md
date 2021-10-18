@@ -44,8 +44,10 @@ There will be one tab open with the source url which is the selected tab.
 
     >>> this_browser = browser.Browser()
     >>> this_browser.load(url_src)
-    >>> this_browser.tabs
-    [Tab(history=['http://test.test/chapter7-link-src'])]
+    >>> len(this_browser.tabs)
+    1
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-link-src'
     >>> this_browser.active_tab
     0
     >>> this_browser.focus == None
@@ -56,9 +58,12 @@ Clicking on the link using a middle click should keep the current tab, and open
 The active tab should still be the one with the source url.
 
     >>> this_browser.handle_middle_click(test.Event(14, 121))
-    >>> this_browser.tabs #doctest: +NORMALIZE_WHITESPACE
-    [Tab(history=['http://test.test/chapter7-link-src']),
-     Tab(history=['http://test.test/chapter7-link-dst'])]
+    >>> len(this_browser.tabs)
+    2
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-link-src'
+    >>> this_browser.tabs[1].url
+    'http://test.test/chapter7-link-dst'
     >>> this_browser.active_tab
     0
     >>> this_browser.focus == None
@@ -68,9 +73,12 @@ Using middle click anywhere that is not a link should not change anything.
 Middle click somewhere that has nothing there.
 
     >>> this_browser.handle_middle_click(test.Event(1, 1))
-    >>> this_browser.tabs #doctest: +NORMALIZE_WHITESPACE
-    [Tab(history=['http://test.test/chapter7-link-src']),
-     Tab(history=['http://test.test/chapter7-link-dst'])]
+    >>> len(this_browser.tabs)
+    2
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-link-src'
+    >>> this_browser.tabs[1].url
+    'http://test.test/chapter7-link-dst'
     >>> this_browser.active_tab
     0
     >>> this_browser.focus == None
@@ -80,9 +88,12 @@ Middle click somewhere that has nothing there.
 Middle click on the address bar.
 
     >>> this_browser.handle_middle_click(test.Event(50, 41))
-    >>> this_browser.tabs #doctest: +NORMALIZE_WHITESPACE
-    [Tab(history=['http://test.test/chapter7-link-src']),
-     Tab(history=['http://test.test/chapter7-link-dst'])]
+    >>> len(this_browser.tabs)
+    2
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-link-src'
+    >>> this_browser.tabs[1].url
+    'http://test.test/chapter7-link-dst'
     >>> this_browser.active_tab
     0
     >>> this_browser.focus == None
@@ -91,9 +102,12 @@ Middle click on the address bar.
 Middle click on the one-th tab.
 
     >>> this_browser.handle_middle_click(test.Event(120, 1))
-    >>> this_browser.tabs #doctest: +NORMALIZE_WHITESPACE
-    [Tab(history=['http://test.test/chapter7-link-src']),
-     Tab(history=['http://test.test/chapter7-link-dst'])]
+    >>> len(this_browser.tabs)
+    2
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-link-src'
+    >>> this_browser.tabs[1].url
+    'http://test.test/chapter7-link-dst'
     >>> this_browser.active_tab
     0
     >>> this_browser.focus == None
@@ -102,9 +116,12 @@ Middle click on the one-th tab.
 Middle click on the new tab button.
 
     >>> this_browser.handle_middle_click(test.Event(20, 20))
-    >>> this_browser.tabs #doctest: +NORMALIZE_WHITESPACE
-    [Tab(history=['http://test.test/chapter7-link-src']),
-     Tab(history=['http://test.test/chapter7-link-dst'])]
+    >>> len(this_browser.tabs)
+    2
+    >>> this_browser.tabs[0].url
+    'http://test.test/chapter7-link-src'
+    >>> this_browser.tabs[1].url
+    'http://test.test/chapter7-link-dst'
     >>> this_browser.active_tab
     0
     >>> this_browser.focus == None

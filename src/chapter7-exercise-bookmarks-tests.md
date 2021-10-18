@@ -28,10 +28,13 @@ Extra Requirements
 * The list of bookmarked pages should be held in a global named `BOOKMARKS`
 * When `request` is given "about:bookmarks" the return should be a tuple of
   an empty dictionary (in place of headers) and the source to the bookmarks page
-  - This page is simply bare links with breaks in between where the link href
-    and content are both the url, for instance if the bookmarks list contained
-    `['http://xkcd.com', 'https://utah.edu']` then the web site body would be
+  - This page is simply bare links with breaks in between separated by
+    newlines.
+  - The link href and content are both the url, for instance if the bookmarks
+    list contained `['http://xkcd.com', 'https://utah.edu']` then the web site
+    body would be
     ```
+    <!doctype html>
     <a href="http://xkcd.com">http://xkcd.com</a><br>
     <a href="https://utah.edu">https://utah.edu</a><br>
     ```
@@ -129,6 +132,7 @@ Request the bookmark site directly.
     >>> bk_url = "about:bookmarks"
     >>> headers, body = browser.request(bk_url)
     >>> print(body) #doctest: +NORMALIZE_WHITESPACE
+    <!doctype html>
     <a href="http://site1.com/">http://site1.com/</a><br>
     <a href="http://site2.com/">http://site2.com/</a><br>
 
@@ -147,4 +151,5 @@ Request the bookmark site directly.
     >>> bk_url = "about:bookmarks"
     >>> headers, body = browser.request(bk_url)
     >>> print(body) #doctest: +NORMALIZE_WHITESPACE
+    <!doctype html>
     <a href="http://site1.com/">http://site1.com/</a><br>
