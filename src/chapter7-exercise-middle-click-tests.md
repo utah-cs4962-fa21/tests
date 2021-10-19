@@ -27,13 +27,13 @@ Boilerplate.
     >>> import browser
 
 First we need to set up two pages, where one is a link to the other.
-This is the page lined _to_.
+This is the page linked _to_.
 
     >>> url_dst = 'http://test.test/chapter7-link-dst'
     >>> body_dst = 'Link destination'
     >>> test.socket.respond_200(url_dst, body_dst)
 
-This is the page that with the link to the above destination.
+This is the page with the link to the above destination.
 
     >>> url_src = 'http://test.test/chapter7-link-src'
     >>> body_src = f'<a href="{url_dst}">Click here</a>'
