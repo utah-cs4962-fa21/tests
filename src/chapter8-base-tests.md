@@ -17,22 +17,22 @@ Testing request
 This chapter adds the ability to submit a POST request in addition to a GET
 one.
 
-    >>> url = 'http://test.test/submit'
+    >>> url = 'http://test.test/chapter8-base/submit'
     >>> request_body = "name=1&comment=2%3D3"
     >>> test.socket.respond(url, b"HTTP/1.0 200 OK\r\n" +
     ... b"Header1: Value1\r\n\r\n" +
     ... b"<div>Form submitted</div>", method="POST", body=request_body)
     >>> headers, body = browser.request(url, request_body)
     >>> test.socket.last_request(url)
-    b'POST /submit HTTP/1.0\r\nContent-Length: 20\r\nHost: test.test\r\n\r\nname=1&comment=2%3D3'
+    b'POST /chapter8-base/submit HTTP/1.0\r\nContent-Length: 20\r\nHost: test.test\r\n\r\nname=1&comment=2%3D3'
 
 Testing InputLayout
 ===================
 
-    >>> url2 = 'http://test.test/example'
+    >>> url2 = 'http://test.test/chapter8-base/example'
     >>> test.socket.respond(url2, b"HTTP/1.0 200 OK\r\n" +
     ... b"Header1: Value1\r\n\r\n" +
-    ... b"<form action=\"/submit\">" +
+    ... b"<form action=\"/chapter8-base/submit\" method=\"POST\">" +
     ... b"  <p>Name: <input name=name value=1></p>" +
     ... b"  <p>Comment: <input name=comment value=\"2=3\"></p>" +
     ... b"  <p><button>Submit!</button></p>" +
@@ -42,7 +42,7 @@ Testing InputLayout
     >>> browser.print_tree(this_browser.tabs[0].document.node)
      <html>
        <body>
-         <form action="/submit">
+         <form action="/chapter8-base/submit" method="POST">
            <p>
              'Name: '
              <input name="name" value="1">

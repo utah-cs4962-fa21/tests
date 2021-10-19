@@ -13,7 +13,9 @@ Implement GET form submissions.
 
 Extra Requirements
 ------------------
-* 
+* To choose whether GET or POST should be used for a form use the form's
+  "method" attribute, which will either be "GET" or "POST"
+* Default to using GET
 
 
 Test code

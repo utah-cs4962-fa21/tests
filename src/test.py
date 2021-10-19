@@ -307,6 +307,10 @@ class enter_event:
     def __init__(self):
         pass
 
+class tab_event:
+    def __init__(self):
+        pass
+
 def patch_canvas():
     tkinter.Canvas = MockCanvas
 
