@@ -319,6 +319,8 @@ def patch_silent_canvas():
 def unpatch_canvas():
     tkinter.Canvas = original_tkinter_canvas
 
+
+NORMALIZE_FONT = False
 class MockFont:
     def __init__(self, size=None, weight=None, slant=None, style=None, family=None):
         self.size = size
@@ -351,7 +353,7 @@ class MockFont:
         assert False, f"bad option: {option}"
 
     def __repr__(self):
-        if self.family:
+        if self.family and not NORMALIZE_FONT:
             return "Font size={} weight={} slant={} style={} family={}".format(
                 self.size, self.weight, self.slant, self.style, self.family)
         else:

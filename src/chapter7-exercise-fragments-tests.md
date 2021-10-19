@@ -23,6 +23,7 @@ Boilerplate.
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
     >>> _ = test.patch_skip_chrome_canvas()
+    >>> test.NORMALIZE_FONT = True
     >>> import browser
 
 Shorten window
