@@ -14,6 +14,12 @@ Also, implement fragment links: relative URLs that begin with a # don’t load a
 The table of contents on this page uses fragment links.
 
 
+Extra Requirements
+------------------
+* We do not care what happens when middle clicking a relative fragment and it
+  will not be tested.
+
+
 Test code
 ---------
 
