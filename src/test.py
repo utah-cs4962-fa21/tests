@@ -25,6 +25,7 @@ sys.modules["certifi"] = certifi()
 class socket:
     URLs = {}
     Requests = {}
+    recent_request_path = None
 
     def __init__(self, *args, **kwargs):
         self.request = b""
@@ -43,6 +44,7 @@ class socket:
     def send(self, text):
         self.request += text
         self.method, self.path, _ = self.request.decode("latin1").split(" ", 2)
+        socket.recent_request_path = self.path
 
         if self.method == "POST":
             beginning, self.body = self.request.decode("latin1").split("\r\n\r\n")
@@ -61,6 +63,11 @@ class socket:
         else:
             url = self.scheme + "://" + self.host + ":" + str(self.port) + self.path
         self.Requests.setdefault(url, []).append(self.request)
+        if url not in self.URLs and "?" in url:
+            response = ("HTTP/1.0 200 Incorrect GET form submisson\r\n"
+                        "\r\n"
+                        "Incorrect GET form submisson")
+            return io.StringIO(response.replace(newline, "\n"), newline)
         assert self.method == self.URLs[url][0]
         output = self.URLs[url][1]
         if self.URLs[url][2]:
@@ -114,6 +121,10 @@ class socket:
                               "Location: {}\r\n" +
                               "\r\n").format(to_url).encode(),
                     method="GET")
+
+    @classmethod
+    def last_request_path(cls):
+        return cls.recent_request_path
 
 class ssl:
     def wrap_socket(self, s, server_hostname):
@@ -264,7 +275,7 @@ class SkipChromeCanvas:
 
 
     def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None, outline=None):
-        if y1 > 100:
+        if y1 > 100 and fill != "blue":
             print("create_rectangle: x1={} y1={} x2={} y2={} width={} fill={}".format(
                 x1, y1, x2, y2, width, repr(fill)))
 

@@ -38,7 +38,15 @@ This is the form page.
     >>> this_browser = browser.Browser()
     >>> this_browser.load(url)
 
-Clicking on the input should clear its content at set focus
+Pressing enter when there is no focus should not change anything.
+
+    >>> this_browser.focus == None
+    True
+    >>> this_browser.handle_enter(test.enter_event())
+    >>> this_browser.focus == None
+    True
+
+Clicking on the input should clear its content and set focus
 
     >>> this_browser.handle_click(test.Event(90, 25 + browser.CHROME_PX))
     >>> this_browser.focus
@@ -57,5 +65,4 @@ This is what the raw request should be.
 
     >>> test.socket.last_request('http://test.test/chapter8-enter/submit')
     b'POST /chapter8-enter/submit HTTP/1.0\r\nContent-Length: 26\r\nHost: test.test\r\n\r\nname=Killroy&comment=2%3D3'
-
 
