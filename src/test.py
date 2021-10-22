@@ -264,7 +264,7 @@ class SkipChromeCanvas:
 
 
     def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None, outline=None):
-        if y1 > 100:
+        if y1 > 100 and fill != "blue":
             print("create_rectangle: x1={} y1={} x2={} y2={} width={} fill={}".format(
                 x1, y1, x2, y2, width, repr(fill)))
 
