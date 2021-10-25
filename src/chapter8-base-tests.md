@@ -9,6 +9,7 @@ how the server processes form submissions.
     >>> import test
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
+    >>> test.NORMALIZE_FONT = True
     >>> import browser
 
 Testing request
