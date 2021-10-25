@@ -25,6 +25,7 @@ sys.modules["certifi"] = certifi()
 class socket:
     URLs = {}
     Requests = {}
+    recent_request_path = None
 
     def __init__(self, *args, **kwargs):
         self.request = b""
@@ -43,6 +44,7 @@ class socket:
     def send(self, text):
         self.request += text
         self.method, self.path, _ = self.request.decode("latin1").split(" ", 2)
+        socket.recent_request_path = self.path
 
         if self.method == "POST":
             beginning, self.body = self.request.decode("latin1").split("\r\n\r\n")
@@ -61,6 +63,11 @@ class socket:
         else:
             url = self.scheme + "://" + self.host + ":" + str(self.port) + self.path
         self.Requests.setdefault(url, []).append(self.request)
+        if url not in self.URLs and "?" in url:
+            response = ("HTTP/1.0 200 Incorrect GET form submisson\r\n"
+                        "\r\n"
+                        "Incorrect GET form submisson")
+            return io.StringIO(response.replace(newline, "\n"), newline)
         assert self.method == self.URLs[url][0]
         output = self.URLs[url][1]
         if self.URLs[url][2]:
@@ -114,6 +121,10 @@ class socket:
                               "Location: {}\r\n" +
                               "\r\n").format(to_url).encode(),
                     method="GET")
+
+    @classmethod
+    def last_request_path(cls):
+        return cls.recent_request_path
 
 class ssl:
     def wrap_socket(self, s, server_hostname):
@@ -304,6 +315,10 @@ class backspace_event:
         pass
 
 class enter_event:
+    def __init__(self):
+        pass
+
+class tab_event:
     def __init__(self):
         pass
 
