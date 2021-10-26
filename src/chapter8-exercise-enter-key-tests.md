@@ -61,3 +61,13 @@ This will be matched against the earlier description.
     ...   this_browser.handle_key(test.key_event(c))
     >>> this_browser.handle_enter(test.enter_event())
 
+Examine the post request.
+
+    >>> url = 'http://test.test/chapter8-enter/submit'
+    >>> req = test.socket.last_request(url).decode().lower()
+    >>> req.startswith("post")
+    True
+    >>> "content-length: 26" in req
+    True
+    >>> req.endswith('name=killroy&comment=2%3d3')
+    True
