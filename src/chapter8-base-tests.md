@@ -24,8 +24,14 @@ one.
     ... b"Header1: Value1\r\n\r\n" +
     ... b"<div>Form submitted</div>", method="POST", body=request_body)
     >>> headers, body = browser.request(url, request_body)
-    >>> test.socket.last_request(url)
-    b'POST /chapter8-base/submit HTTP/1.0\r\nContent-Length: 20\r\nHost: test.test\r\n\r\nname=1&comment=2%3D3'
+    >>> req = test.socket.last_request(url).decode().lower()
+    >>> req.startswith("post")
+    True
+    >>> "content-length: 20" in req
+    True
+    >>> req.endswith('name=1&comment=2%3d3')
+    True
+
 
 Testing InputLayout
 ===================
@@ -60,11 +66,11 @@ Testing InputLayout
            BlockLayout(x=13, y=18, width=774, height=45.0)
              InlineLayout(x=13, y=18, width=774, height=15.0)
                LineLayout(x=13, y=18, width=774, height=15.0)
-                 TextLayout(x=13, y=20.25, width=60, height=12, font=Font size=12 weight=normal slant=roman style=None
+                 TextLayout(x=13, y=20.25, width=60, height=12, font=Font size=12 weight=normal slant=roman style=None)
                  InputLayout(x=85, y=20.25, width=200, height=12)
              InlineLayout(x=13, y=33.0, width=774, height=15.0)
                LineLayout(x=13, y=33.0, width=774, height=15.0)
-                 TextLayout(x=13, y=35.25, width=96, height=12, font=Font size=12 weight=normal slant=roman style=None
+                 TextLayout(x=13, y=35.25, width=96, height=12, font=Font size=12 weight=normal slant=roman style=None)
                  InputLayout(x=121, y=35.25, width=200, height=12)
              InlineLayout(x=13, y=48.0, width=774, height=15.0)
                LineLayout(x=13, y=48.0, width=774, height=15.0)
@@ -79,11 +85,11 @@ of a text input should be its `value` attribute:
     >>> display_list = []
     >>> text_input.paint(display_list)
     >>> display_list
-    [DrawRect(top=20.25 left=85 bottom=32.25 right=285 color=lightblue), DrawText(text=1)]
+    [DrawRect(top=20.25 left=85 bottom=32.25 right=285 color=lightblue), DrawText(top=20.25 left=85 bottom=32.25 text=1 font=Font size=12 weight=normal slant=roman style=None)]
     >>> display_list = []
     >>> button.paint(display_list)
     >>> display_list
-    [DrawRect(top=50.25 left=13 bottom=62.25 right=213 color=orange), DrawText(text=Submit!)]
+    [DrawRect(top=50.25 left=13 bottom=62.25 right=213 color=orange), DrawText(top=50.25 left=13 bottom=62.25 text=Submit! font=Font size=12 weight=normal slant=roman style=None)]
 
 Testing form submission
 =======================

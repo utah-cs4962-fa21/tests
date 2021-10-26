@@ -61,8 +61,3 @@ This will be matched against the earlier description.
     ...   this_browser.handle_key(test.key_event(c))
     >>> this_browser.handle_enter(test.enter_event())
 
-This is what the raw request should be.
-
-    >>> test.socket.last_request('http://test.test/chapter8-enter/submit')
-    b'POST /chapter8-enter/submit HTTP/1.0\r\nContent-Length: 26\r\nHost: test.test\r\n\r\nname=Killroy&comment=2%3D3'
-
