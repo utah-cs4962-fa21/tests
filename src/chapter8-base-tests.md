@@ -23,7 +23,7 @@ one.
     >>> test.socket.respond(url, b"HTTP/1.0 200 OK\r\n" +
     ... b"Header1: Value1\r\n\r\n" +
     ... b"<div>Form submitted</div>", method="POST", body=request_body)
-    >>> headers, body = browser.request(url, request_body)
+    >>> headers, body = browser.request(url, payload=request_body)
     >>> req = test.socket.last_request(url).decode().lower()
     >>> req.startswith("post")
     True
