@@ -58,6 +58,12 @@ CURRENT_TESTS = {
                   "chapter8-exercise-tab-tests.md",
                   "chapter8-exercise-get-forms-tests.md",
                   ],
+    "chapter9" : ["chapter9-base-tests.md",
+                  "chapter9-exercise-node-children-tests.md",
+                  "chapter9-exercise-create-element-tests.md",
+                  "chapter9-exercise-ids-tests.md",
+                  "chapter9-exercise-event-bubbling-tests.md",
+                  ],
 }
 
 all_tests = list()

@@ -9,6 +9,7 @@ import tkinter
 import tkinter.font
 import unittest
 import email
+import os
 from unittest import mock
 
 
@@ -18,7 +19,7 @@ def normalize_display_list(dl):
 
 class certifi:
     def where(self):
-        pass
+        return os.getcwd()
 
 sys.modules["certifi"] = certifi()
 
@@ -127,6 +128,9 @@ class socket:
         return cls.recent_request_path
 
 class ssl:
+    def __init__(self, *args):
+        pass
+
     def wrap_socket(self, s, server_hostname):
         s.ssl_hostname = server_hostname
         if s.connected:
@@ -134,19 +138,21 @@ class ssl:
         s.scheme = "https"
         return s
 
-    def load_default_certs():
+    def load_default_certs(self):
         pass
 
-    def load_verify_locations(**kwargs):
+    def load_verify_locations(self, **kwargs):
         pass
 
-    @classmethod
-    def SSLContext(self, protocol=None):
-        return ssl.create_default_context()
+    # @classmethod
+    # def SSLContext(cls, protocol=None):
+    #     return cls.create_default_context()
 
     @classmethod
     def patch(cls):
+        _ = mock.patch("ssl.SSLContext", wraps=cls).start()
         return mock.patch("ssl.create_default_context", wraps=cls)
+
 
 
 class SilentTk:
