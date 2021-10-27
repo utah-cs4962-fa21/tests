@@ -48,12 +48,12 @@ class socket:
 
         if self.method == "POST":
             beginning, self.body = self.request.decode("latin1").split("\r\n\r\n")
-            headers = [item.split(": ") for item in beginning.split("\r\n")[1:]]
+            headers = [item.split(":") for item in beginning.split("\r\n")[1:]]
             content_length = None
             for tup in headers:
                 key, val = tup
                 if key.lower() == "content-length":
-                    content_length = val
+                    content_length = val.strip()
             assert content_length != None, "Content-Length not present in headers"
             assert len(self.body) == int(content_length), len(self.body)
 
