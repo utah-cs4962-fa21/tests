@@ -32,6 +32,15 @@ class socket:
         self.connected = False
         self.ssl_hostname = None
 
+    def setsockopt(self, *args):
+        assert False, "In your server.py file place socket creation/bind/etc inside an if __name__ == \"__main__\""
+
+    def bind(self, *args):
+        assert False, "In your server.py file place socket creation/bind/etc inside an if __name__ == \"__main__\""
+
+    def listen(self, *args):
+        assert False, "In your server.py file place socket creation/bind/etc inside an if __name__ == \"__main__\""
+
     def connect(self, host_port):
         self.host, self.port = host_port
         self.connected = True
