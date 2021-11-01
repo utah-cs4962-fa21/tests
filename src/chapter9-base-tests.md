@@ -8,6 +8,7 @@ interaction.
     >>> import test
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
+    >>> test.NORMALIZE_FONT = True
     >>> import browser
 
 Note that we aren't mocking `dukpy`. It should just run JavaScript normally!
@@ -17,25 +18,28 @@ Testing basic <script> support
 
 The browser should download JavaScript code mentioned in a `<script>` tag:
 
-    >>> url = 'http://test.test/html'
-    >>> url2 = 'http://test.test/js'
+    >>> url = 'http://test.test/chapter9-base/html'
+    >>> url2 = 'http://test.test/chapter9-base/js'
     >>> html_page = "<script src=" + url2 + "></script>"
-    >>> test.socket.respond(url, b"HTTP/1.0 200 OK\r\n\r\n" + html_page.encode("utf8"))
-    >>> test.socket.respond(url2, b"HTTP/1.0 200 OK\r\n\r\n")
+    >>> test.socket.respond_200(url, body=html_page)
+    >>> test.socket.respond_200(url2, body="")
     >>> browser.Browser().load(url)
-    >>> test.socket.last_request(url2)
-    b'GET /js HTTP/1.0\r\nHost: test.test\r\n\r\n'
+    >>> req = test.socket.last_request(url2).decode("utf-8").lower()
+    >>> req.startswith("get")
+    True
+    >>> req.split()[1]
+    '/chapter9-base/js'
 
 If the script succeeds, the browser prints nothing:
 
-    >>> test.socket.respond(url2, b"HTTP/1.0 200 OK\r\n\r\nvar x = 2; x + x")
+    >>> test.socket.respond_200(url2, body="var x = 2; x + x")
     >>> browser.Browser().load(url)
 
 If instead the script crashes, the browser prints an error message:
 
-    >>> test.socket.respond(url2, b"HTTP/1.0 200 OK\r\n\r\nthrow Error('Oops');")
+    >>> test.socket.respond_200(url2, body="throw Error('Oops');")
     >>> browser.Browser().load(url) #doctest: +ELLIPSIS
-    Script http://test.test/js crashed Error: Oops
+    Script http://test.test/chapter9-base/js crashed Error: Oops
     ...
 
 Note that in the last test I set the `ELLIPSIS` flag to elide the duktape stack
@@ -46,33 +50,30 @@ Testing JSContext
 
 For the rest of these tests we're going to use `console.log` for most testing:
 
-    >>> script = "console.log('Hello, world!')"
-    >>> test.socket.respond(url2, b"HTTP/1.0 200 OK\r\n\r\n" + script.encode("utf8"))
+    >>> test.socket.respond_200(url2, body="console.log('Hello, world!')")
     >>> browser.Browser().load(url)
     Hello, world!
 
 Note that you can print other data structures as well:
 
-    >>> script = "console.log([2, 3, 4])"
-    >>> test.socket.respond(url2, b"HTTP/1.0 200 OK\r\n\r\n" + script.encode("utf8"))
+    >>> test.socket.respond_200(url2, body="console.log([2, 3, 4])")
     >>> browser.Browser().load(url)
     [2, 3, 4]
 
 Let's test that variables work:
 
-    >>> script = "var x = 'Hello!'; console.log(x)"
-    >>> test.socket.respond(url2, b"HTTP/1.0 200 OK\r\n\r\n" + script.encode("utf8"))
+    >>> test.socket.respond_200(url2, body="var x = 'Hello!'; console.log(x)")
     >>> browser.Browser().load(url)
     Hello!
 
 Next let's try to do two scripts:
 
-    >>> url2 = 'http://test.test/js1'
-    >>> url3 = 'http://test.test/js2'
+    >>> url2 = 'http://test.test/chapter9-base/js1'
+    >>> url3 = 'http://test.test/chapter9-base/js2'
     >>> html_page = "<script src=" + url2 + "></script>" + "<script src=" + url3 + "></script>"
-    >>> test.socket.respond(url, b"HTTP/1.0 200 OK\r\n\r\n" + html_page.encode("utf8"))
-    >>> test.socket.respond(url2, b"HTTP/1.0 200 OK\r\n\r\nvar x = 'Testing, testing';")
-    >>> test.socket.respond(url3, b"HTTP/1.0 200 OK\r\n\r\nconsole.log(x);")
+    >>> test.socket.respond_200(url, body=html_page)
+    >>> test.socket.respond_200(url2, body="var x = 'Testing, testing';")
+    >>> test.socket.respond_200(url3, body="console.log(x);")
     >>> browser.Browser().load(url)
     Testing, testing
 
@@ -87,7 +88,7 @@ matching nodes:
     ...   <p id=lorem>Lorem</p>
     ...   <p class=ipsum>Ipsum</p>
     ... </div>"""
-    >>> test.socket.respond(url, b"HTTP/1.0 200 OK\r\n\r\n" + page.encode("utf8"))
+    >>> test.socket.respond_200(url, body=page)
     >>> b = browser.Browser()
     >>> b.load(url)
     >>> js = b.tabs[0].js
@@ -137,7 +138,7 @@ One annoying thing about `innerHTML` is that, since it is an assignment, it
 returns its right hand side. I use `void()` to avoid testing that.
 
     >>> js.run("void(document.querySelectorAll('p')[0].innerHTML" +
-    ...     " = 'This is a <b id=new>new</b> element!')")
+    ...        " = 'This is a <b id=wen>new</b> element!')")
 
 Once we've changed the page, the browser should rerender:
 
@@ -148,14 +149,14 @@ Once we've changed the page, the browser should rerender:
            BlockLayout(x=13, y=18, width=774, height=30.0)
              InlineLayout(x=13, y=18, width=774, height=15.0)
                LineLayout(x=13, y=18, width=774, height=15.0)
-                 TextLayout(x=13, y=20.25, width=48, height=12, font=Font size=12 weight=normal slant=roman style=None
-                 TextLayout(x=73, y=20.25, width=24, height=12, font=Font size=12 weight=normal slant=roman style=None
-                 TextLayout(x=109, y=20.25, width=12, height=12, font=Font size=12 weight=normal slant=roman style=None
-                 TextLayout(x=133, y=20.25, width=36, height=12, font=Font size=12 weight=bold slant=roman style=None
-                 TextLayout(x=181, y=20.25, width=96, height=12, font=Font size=12 weight=normal slant=roman style=None
+                 TextLayout(x=13, y=20.25, width=48, height=12, font=Font size=12 weight=normal slant=roman style=None)
+                 TextLayout(x=73, y=20.25, width=24, height=12, font=Font size=12 weight=normal slant=roman style=None)
+                 TextLayout(x=109, y=20.25, width=12, height=12, font=Font size=12 weight=normal slant=roman style=None)
+                 TextLayout(x=133, y=20.25, width=36, height=12, font=Font size=12 weight=bold slant=roman style=None)
+                 TextLayout(x=181, y=20.25, width=96, height=12, font=Font size=12 weight=normal slant=roman style=None)
              InlineLayout(x=13, y=33.0, width=774, height=15.0)
                LineLayout(x=13, y=33.0, width=774, height=15.0)
-                 TextLayout(x=13, y=35.25, width=60, height=12, font=Font size=12 weight=normal slant=roman style=None
+                 TextLayout(x=13, y=35.25, width=60, height=12, font=Font size=12 weight=normal slant=roman style=None)
 
 Note that there's now many `TextLayout`s inside the first `LineLayout`, one per
 new word.
@@ -181,15 +182,15 @@ The page is rerendered again:
            BlockLayout(x=13, y=18, width=774, height=30.0)
              InlineLayout(x=13, y=18, width=774, height=15.0)
                LineLayout(x=13, y=18, width=774, height=15.0)
-                 TextLayout(x=13, y=20.25, width=60, height=12, font=Font size=12 weight=normal slant=roman style=None
+                 TextLayout(x=13, y=20.25, width=60, height=12, font=Font size=12 weight=normal slant=roman style=None)
              InlineLayout(x=13, y=33.0, width=774, height=15.0)
                LineLayout(x=13, y=33.0, width=774, height=15.0)
-                 TextLayout(x=13, y=35.25, width=60, height=12, font=Font size=12 weight=normal slant=roman style=None
+                 TextLayout(x=13, y=35.25, width=60, height=12, font=Font size=12 weight=normal slant=roman style=None)
 
 Despite this, the old nodes should stick around:
 
     >>> js.run("old_b.getAttribute('id')")
-    'new'
+    'wen'
 
 Testing events
 ==============
@@ -216,7 +217,7 @@ link, a button, and an input area:
     ...   <input name=input value=hi>
     ...   <button>Submit</button>
     ... </form>"""
-    >>> test.socket.respond(url, b"HTTP/1.0 200 OK\r\n\r\n" + page.encode("utf8"))
+    >>> test.socket.respond_200(url, body=page)
     >>> b.load(url)
     >>> js = b.tabs[1].js
 
@@ -265,8 +266,8 @@ events. The display list gives us coordinates for clicking.
          BlockLayout(x=13, y=18, width=774, height=30.0)
            InlineLayout(x=13, y=18, width=774, height=15.0)
              LineLayout(x=13, y=18, width=774, height=15.0)
-               TextLayout(x=13, y=20.25, width=60, height=12, font=Font size=12 weight=normal slant=roman style=None
-               TextLayout(x=85, y=20.25, width=36, height=12, font=Font size=12 weight=normal slant=roman style=None
+               TextLayout(x=13, y=20.25, width=60, height=12, font=Font size=12 weight=normal slant=roman style=None)
+               TextLayout(x=85, y=20.25, width=36, height=12, font=Font size=12 weight=normal slant=roman style=None)
            InlineLayout(x=13, y=33.0, width=774, height=15.0)
              LineLayout(x=13, y=33.0, width=774, height=15.0)
                InputLayout(x=13, y=35.25, width=200, height=12)
@@ -285,7 +286,7 @@ However, we should not have navigated away from the original URL, because we
 prevented submission:
 
     >>> b.tabs[1].history[-1]
-    'http://test.test/html'
+    'http://test.test/chapter9-base/html'
 
 Similarly, when we clicked on the `input` element its `value` should be cleared,
 but when we then typed `t` into it that was cancelled so the value should still

@@ -19,11 +19,6 @@ Double-check that clicking on links still works, and make sure preventDefault
     link.
 
 
-Extra Requirements
-------------------
-* 
-
-
 Test code
 ---------
 
@@ -32,4 +27,135 @@ Boilerplate.
     >>> import test
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
+    >>> test.NORMALIZE_FONT = True
     >>> import browser
+
+Set up the webpage and script links.
+
+    >>> web_url = 'http://test.test/chapter9-create-1/html'
+    >>> script_url = 'http://test.test/chapter9-create-1/js'
+    >>> html = ("<script src=" + script_url + "></script>"
+    ...       + "<div><form><input name=bubbles value=sugar></form></div>")
+    >>> test.socket.respond_200(web_url, body=html)
+
+Attach an event listener to each nested element.
+Click an show that all event listeners are called in the correct order.
+
+    >>> script = """
+    ... document.querySelectorAll('div')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('div saw a click');
+    ...   });
+    ... document.querySelectorAll('form')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('form saw a click');
+    ...   });
+    ... document.querySelectorAll('input')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('input saw a click');
+    ...   });
+    ... """
+    >>> test.socket.respond_200(script_url, body=script)
+    >>> this_browser = browser.Browser()
+    >>> this_browser.load(web_url)
+    >>> this_browser.handle_click(test.Event(20, 100 + 24))
+    input saw a click
+    form saw a click
+    div saw a click
+    >>> this_browser.tabs[0].js.run("document.querySelectorAll('input')[0].getAttribute('value')")
+    ''
+
+Setup a new webpage with the same content but a different script.
+This time prevent the default in the input.
+
+    >>> web_url = 'http://test.test/chapter9-create-2/html'
+    >>> script_url = 'http://test.test/chapter9-create-2/js'
+    >>> html = ("<script src=" + script_url + "></script>"
+    ...       + "<div><form><input name=bubbles value=sugar></form></div>")
+    >>> test.socket.respond_200(web_url, body=html)
+    >>> script = """
+    ... document.querySelectorAll('div')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('div saw a click');
+    ...   });
+    ... document.querySelectorAll('form')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('form saw a click');
+    ...   });
+    ... document.querySelectorAll('input')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('input saw a click');
+    ...     e.preventDefault();
+    ...   });
+    ... """
+    >>> test.socket.respond_200(script_url, body=script)
+    >>> this_browser = browser.Browser()
+    >>> this_browser.load(web_url)
+    >>> this_browser.handle_click(test.Event(20, 100 + 24))
+    input saw a click
+    form saw a click
+    div saw a click
+    >>> this_browser.tabs[0].js.run("document.querySelectorAll('input')[0].getAttribute('value')")
+    'sugar'
+
+Stopping propagation should also work.
+
+    >>> web_url = 'http://test.test/chapter9-create-3/html'
+    >>> script_url = 'http://test.test/chapter9-create-3/js'
+    >>> html = ("<script src=" + script_url + "></script>"
+    ...       + "<div><form><input name=bubbles value=sugar></form></div>")
+    >>> test.socket.respond_200(web_url, body=html)
+    >>> script = """
+    ... document.querySelectorAll('div')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('div saw a click');
+    ...   });
+    ... document.querySelectorAll('form')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('form saw a click');
+    ...     e.stopPropagation();
+    ...   });
+    ... document.querySelectorAll('input')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('input saw a click');
+    ...   });
+    ... """
+    >>> test.socket.respond_200(script_url, body=script)
+    >>> this_browser = browser.Browser()
+    >>> this_browser.load(web_url)
+    >>> this_browser.handle_click(test.Event(20, 100 + 24))
+    input saw a click
+    form saw a click
+    >>> this_browser.tabs[0].js.run("document.querySelectorAll('input')[0].getAttribute('value')")
+    ''
+
+Both should be able to work on the same click.
+
+    >>> web_url = 'http://test.test/chapter9-create-3/html'
+    >>> script_url = 'http://test.test/chapter9-create-3/js'
+    >>> html = ("<script src=" + script_url + "></script>"
+    ...       + "<div><form><input name=bubbles value=sugar></form></div>")
+    >>> test.socket.respond_200(web_url, body=html)
+    >>> script = """
+    ... document.querySelectorAll('div')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('div saw a click');
+    ...   });
+    ... document.querySelectorAll('form')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('form saw a click');
+    ...   });
+    ... document.querySelectorAll('input')[0].addEventListener('click',
+    ...   function(e) {
+    ...     console.log('input saw a click');
+    ...     e.preventDefault();
+    ...     e.stopPropagation();
+    ...   });
+    ... """
+    >>> test.socket.respond_200(script_url, body=script)
+    >>> this_browser = browser.Browser()
+    >>> this_browser.load(web_url)
+    >>> this_browser.handle_click(test.Event(20, 100 + 24))
+    input saw a click
+    >>> this_browser.tabs[0].js.run("document.querySelectorAll('input')[0].getAttribute('value')")
+    'sugar'
