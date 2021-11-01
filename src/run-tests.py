@@ -58,6 +58,12 @@ CURRENT_TESTS = {
                   "chapter8-exercise-tab-tests.md",
                   "chapter8-exercise-get-forms-tests.md",
                   ],
+    "chapter9" : ["chapter9-base-tests.md",
+                  "chapter9-exercise-create-element-tests.md",
+                  "chapter9-exercise-node-children-tests.md",
+                  "chapter9-exercise-ids-tests.md",
+                  "chapter9-exercise-event-bubbling-tests.md",
+                  ],
 }
 
 all_tests = list()
@@ -109,9 +115,9 @@ def main(argv):
         if failure_count != 0:
             state = "failed {:<2} out of {:<2} tests".format(failure_count, test_count)
             total_state = "failed"
-        print("{:>40}: {}".format(name, state))
+        print("{:>42}: {}".format(name, state))
     print("-"*52)
-    print("{:>40}: {} ".format("Final", total_state))
+    print("{:>42}: {} ".format("Final", total_state))
 
     return int(total_state == "failed")
 
