@@ -18,8 +18,8 @@ Testing basic <script> support
 
 The browser should download JavaScript code mentioned in a `<script>` tag:
 
-    >>> url = 'http://test.test/chapter9-base/html'
-    >>> url2 = 'http://test.test/chapter9-base/js'
+    >>> url = 'http://test.test/chapter9-base-1/html'
+    >>> url2 = 'http://test.test/chapter9-base-1/js'
     >>> html_page = "<script src=" + url2 + "></script>"
     >>> test.socket.respond_200(url, body=html_page)
     >>> test.socket.respond_200(url2, body="")
@@ -28,18 +28,26 @@ The browser should download JavaScript code mentioned in a `<script>` tag:
     >>> req.startswith("get")
     True
     >>> req.split()[1]
-    '/chapter9-base/js'
+    '/chapter9-base-1/js'
 
 If the script succeeds, the browser prints nothing:
 
+    >>> url = 'http://test.test/chapter9-base-2/html'
+    >>> url2 = 'http://test.test/chapter9-base-2/js'
+    >>> html_page = "<script src=" + url2 + "></script>"
+    >>> test.socket.respond_200(url, body=html_page)
     >>> test.socket.respond_200(url2, body="var x = 2; x + x")
     >>> browser.Browser().load(url)
 
 If instead the script crashes, the browser prints an error message:
 
+    >>> url = 'http://test.test/chapter9-base-3/html'
+    >>> url2 = 'http://test.test/chapter9-base-3/js'
+    >>> html_page = "<script src=" + url2 + "></script>"
+    >>> test.socket.respond_200(url, body=html_page)
     >>> test.socket.respond_200(url2, body="throw Error('Oops');")
     >>> browser.Browser().load(url) #doctest: +ELLIPSIS
-    Script http://test.test/chapter9-base/js crashed Error: Oops
+    Script http://test.test/chapter9-base-3/js crashed Error: Oops
     ...
 
 Note that in the last test I set the `ELLIPSIS` flag to elide the duktape stack
@@ -50,26 +58,39 @@ Testing JSContext
 
 For the rest of these tests we're going to use `console.log` for most testing:
 
+    >>> url = 'http://test.test/chapter9-base-4/html'
+    >>> url2 = 'http://test.test/chapter9-base-4/js'
+    >>> html_page = "<script src=" + url2 + "></script>"
+    >>> test.socket.respond_200(url, body=html_page)
     >>> test.socket.respond_200(url2, body="console.log('Hello, world!')")
     >>> browser.Browser().load(url)
     Hello, world!
 
 Note that you can print other data structures as well:
 
+    >>> url = 'http://test.test/chapter9-base-5/html'
+    >>> url2 = 'http://test.test/chapter9-base-5/js'
+    >>> html_page = "<script src=" + url2 + "></script>"
+    >>> test.socket.respond_200(url, body=html_page)
     >>> test.socket.respond_200(url2, body="console.log([2, 3, 4])")
     >>> browser.Browser().load(url)
     [2, 3, 4]
 
 Let's test that variables work:
 
+    >>> url = 'http://test.test/chapter9-base-6/html'
+    >>> url2 = 'http://test.test/chapter9-base-6/js'
+    >>> html_page = "<script src=" + url2 + "></script>"
+    >>> test.socket.respond_200(url, body=html_page)
     >>> test.socket.respond_200(url2, body="var x = 'Hello!'; console.log(x)")
     >>> browser.Browser().load(url)
     Hello!
 
 Next let's try to do two scripts:
 
-    >>> url2 = 'http://test.test/chapter9-base/js1'
-    >>> url3 = 'http://test.test/chapter9-base/js2'
+    >>> url = 'http://test.test/chapter9-base-7/html'
+    >>> url2 = 'http://test.test/chapter9-base-7/js1'
+    >>> url3 = 'http://test.test/chapter9-base-7/js2'
     >>> html_page = "<script src=" + url2 + "></script>" + "<script src=" + url3 + "></script>"
     >>> test.socket.respond_200(url, body=html_page)
     >>> test.socket.respond_200(url2, body="var x = 'Testing, testing';")
@@ -83,6 +104,7 @@ Testing querySelectorAll
 The `querySelectorAll` method is easiest to test by looking at the number of
 matching nodes:
 
+    >>> url = 'http://test.test/chapter9-base-8/html'
     >>> page = """<!doctype html>
     ... <div>
     ...   <p id=lorem>Lorem</p>
@@ -211,6 +233,7 @@ The `False` is from our `preventDefault` handling (we didn't call it).
 Let's test each of our automatic event types. We'll need a new web page with a
 link, a button, and an input area:
 
+    >>> url = 'http://test.test/chapter9-base-9/html'
     >>> page = """<!doctype html>
     ... <a href=page2>Click me!</a>
     ... <form action=/post>
@@ -286,7 +309,7 @@ However, we should not have navigated away from the original URL, because we
 prevented submission:
 
     >>> b.tabs[1].history[-1]
-    'http://test.test/chapter9-base/html'
+    'http://test.test/chapter9-base-9/html'
 
 Similarly, when we clicked on the `input` element its `value` should be cleared,
 but when we then typed `t` into it that was cancelled so the value should still

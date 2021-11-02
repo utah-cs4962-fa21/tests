@@ -32,8 +32,8 @@ Boilerplate.
 
 Set up the webpage and script links.
 
-    >>> web_url = 'http://test.test/chapter9-create-1/html'
-    >>> script_url = 'http://test.test/chapter9-create-1/js'
+    >>> web_url = 'http://test.test/chapter9-bubble-1/html'
+    >>> script_url = 'http://test.test/chapter9-bubble-1/js'
     >>> html = ("<script src=" + script_url + "></script>"
     ...       + "<div><form><input name=bubbles value=sugar></form></div>")
     >>> test.socket.respond_200(web_url, body=html)
@@ -68,8 +68,8 @@ Click an show that all event listeners are called in the correct order.
 Setup a new webpage with the same content but a different script.
 This time prevent the default in the input.
 
-    >>> web_url = 'http://test.test/chapter9-create-2/html'
-    >>> script_url = 'http://test.test/chapter9-create-2/js'
+    >>> web_url = 'http://test.test/chapter9-bubble-2/html'
+    >>> script_url = 'http://test.test/chapter9-bubble-2/js'
     >>> html = ("<script src=" + script_url + "></script>"
     ...       + "<div><form><input name=bubbles value=sugar></form></div>")
     >>> test.socket.respond_200(web_url, body=html)
@@ -100,8 +100,8 @@ This time prevent the default in the input.
 
 Stopping propagation should also work.
 
-    >>> web_url = 'http://test.test/chapter9-create-3/html'
-    >>> script_url = 'http://test.test/chapter9-create-3/js'
+    >>> web_url = 'http://test.test/chapter9-bubble-3/html'
+    >>> script_url = 'http://test.test/chapter9-bubble-3/js'
     >>> html = ("<script src=" + script_url + "></script>"
     ...       + "<div><form><input name=bubbles value=sugar></form></div>")
     >>> test.socket.respond_200(web_url, body=html)
@@ -131,8 +131,8 @@ Stopping propagation should also work.
 
 Both should be able to work on the same click.
 
-    >>> web_url = 'http://test.test/chapter9-create-3/html'
-    >>> script_url = 'http://test.test/chapter9-create-3/js'
+    >>> web_url = 'http://test.test/chapter9-bubble-4/html'
+    >>> script_url = 'http://test.test/chapter9-bubble-4/js'
     >>> html = ("<script src=" + script_url + "></script>"
     ...       + "<div><form><input name=bubbles value=sugar></form></div>")
     >>> test.socket.respond_200(web_url, body=html)
