@@ -81,6 +81,7 @@ class socket:
                         "\r\n"
                         "Incorrect GET form submisson")
             return io.StringIO(response.replace(newline, "\n"), newline)
+        assert url in self.URLs, f"You are requesting a url that you shouldn't: {url}"
         assert self.method == self.URLs[url][0], f"Expected a {self.URLs[url][0]} request but got a {self.method} request to {url}"
         output = self.URLs[url][1]
         if self.URLs[url][2]:
