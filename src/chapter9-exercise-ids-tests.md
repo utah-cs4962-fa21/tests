@@ -15,7 +15,7 @@ Make sure to handle the case of nodes being added and removed (such as with
 
 Extra Requirements
 ------------------
-* 
+* Element ids will not collide
 
 
 Test code
@@ -28,18 +28,7 @@ Boilerplate.
     >>> _ = test.ssl.patch().start()
     >>> import browser
 
-
-After parse html, start js context, run runtime, before scripts
-
-for elt in ....
-    self.js.run('{elt.id} = new Node({handle});')
-
-Dealing with add/remove node
-before remove check all elts and delete
-
-have func that is find ids
-
-promise no id collisions
+Create the site to test.
 
     >>> url = 'http://test.test/chapter9-ids-1/html'
     >>> html = "<div id=alice><div>"
