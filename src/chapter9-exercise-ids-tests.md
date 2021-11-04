@@ -26,6 +26,7 @@ Boilerplate.
     >>> import test
     >>> _ = test.socket.patch().start()
     >>> _ = test.ssl.patch().start()
+    >>> test.NORMALIZE_FONT = True
     >>> import browser
 
 Create the site to test.
