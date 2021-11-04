@@ -90,8 +90,7 @@ def run_doctests(files):
     mapped_results = dict()
     for fname in files:
         mapped_results[fname] = doctest.testfile(fname,
-                                                 optionflags=doctest.ELLIPSIS,
-                                                 raise_on_error=True)
+                                                 optionflags=doctest.ELLIPSIS)
     return mapped_results
 
 def parse_arguments(argv):
