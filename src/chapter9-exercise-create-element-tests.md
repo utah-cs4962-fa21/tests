@@ -38,9 +38,7 @@ Show the page with no content changes by scripts.
     >>> this_browser.load(web_url)
     >>> browser.print_tree(this_browser.tabs[0].document)
      DocumentLayout()
-       BlockLayout(x=13, y=18, width=774, height=30.0)
-         InlineLayout(x=13, y=18, width=774, height=0)
-           LineLayout(x=13, y=18, width=774, height=0)
+       BlockLayout(x=13, y=18, width=774, height=30.0)...
          BlockLayout(x=13, y=18, width=774, height=30.0)
            InlineLayout(x=13, y=18, width=774, height=15.0)
              LineLayout(x=13, y=18, width=774, height=15.0)
@@ -69,9 +67,7 @@ Create an input and add it as a child to the `<p>` at the end.
     >>> this_browser.load(web_url)
     >>> browser.print_tree(this_browser.tabs[0].document)
      DocumentLayout()
-       BlockLayout(x=13, y=18, width=774, height=30.0)
-         InlineLayout(x=13, y=18, width=774, height=0)
-           LineLayout(x=13, y=18, width=774, height=0)
+       BlockLayout(x=13, y=18, width=774, height=30.0)...
          BlockLayout(x=13, y=18, width=774, height=30.0)
            InlineLayout(x=13, y=18, width=774, height=15.0)
              LineLayout(x=13, y=18, width=774, height=15.0)
@@ -101,9 +97,7 @@ Create an input and add it inside the `<p>` before the `<b>`
     >>> this_browser.load(web_url)
     >>> browser.print_tree(this_browser.tabs[0].document)
      DocumentLayout()
-       BlockLayout(x=13, y=18, width=774, height=30.0)
-         InlineLayout(x=13, y=18, width=774, height=0)
-           LineLayout(x=13, y=18, width=774, height=0)
+       BlockLayout(x=13, y=18, width=774, height=30.0)...
          BlockLayout(x=13, y=18, width=774, height=30.0)
            InlineLayout(x=13, y=18, width=774, height=15.0)
              LineLayout(x=13, y=18, width=774, height=15.0)
@@ -133,9 +127,7 @@ by using `insertBefore` with a reference node of null.
     >>> this_browser.load(web_url)
     >>> browser.print_tree(this_browser.tabs[0].document)
      DocumentLayout()
-       BlockLayout(x=13, y=18, width=774, height=30.0)
-         InlineLayout(x=13, y=18, width=774, height=0)
-           LineLayout(x=13, y=18, width=774, height=0)
+       BlockLayout(x=13, y=18, width=774, height=30.0)...
          BlockLayout(x=13, y=18, width=774, height=30.0)
            InlineLayout(x=13, y=18, width=774, height=15.0)
              LineLayout(x=13, y=18, width=774, height=15.0)
