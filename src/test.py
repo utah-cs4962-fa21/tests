@@ -23,6 +23,13 @@ class certifi:
 
 sys.modules["certifi"] = certifi()
 
+
+from ssl import SSLCertVerificationError
+def fake_badssl(hostname):
+    if hostname.endswith(".badssl.com"):
+        raise SSLCertVerificationError()
+
+NO_CACHE = False
 class socket:
     URLs = {}
     Requests = {}
@@ -47,6 +54,7 @@ class socket:
         self.connected = True
         if self.ssl_hostname != None:
             assert self.ssl_hostname == self.host
+            fake_badssl(self.host)
             self.scheme = "https"
         else:
             self.scheme = "http"
@@ -97,6 +105,9 @@ class socket:
 
     @classmethod
     def respond(cls, url, response, method="GET", body=None):
+        if NO_CACHE:
+            respone = response.replace(b"\r\n\r\n",
+                                       b"\r\nCache-Control: no-store\r\n\r\n")
         cls.URLs[url] = [method, response, body]
 
     @classmethod
@@ -107,8 +118,23 @@ class socket:
         cls.respond(url, response, "GET")
 
     @classmethod
+    def respond_ok(cls, url, body):
+        response = ("HTTP/1.0 200 OK\r\n" +
+                    "\r\n" +
+                    body).encode()
+        cls.respond(url, response, "GET")
+
+    @classmethod
+    def made_request(cls, url):
+        return url in cls.Requests
+
+    @classmethod
     def last_request(cls, url):
         return cls.Requests[url][-1]
+
+    @classmethod
+    def clear_history(cls):
+        cls.Requests = {}
 
     @classmethod
     def count_header_last_request(cls, url, header):
@@ -148,6 +174,7 @@ class ssl:
         s.ssl_hostname = server_hostname
         if s.connected:
             assert s.host == server_hostname
+            fake_badssl(s.host)
         s.scheme = "https"
         return s
 
