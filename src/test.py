@@ -66,7 +66,7 @@ class socket:
 
         if self.method == "POST":
             beginning, self.body = self.request.decode("latin1").split("\r\n\r\n")
-            headers = [item.split(":") for item in beginning.split("\r\n")[1:]]
+            headers = [item.split(":", 1) for item in beginning.split("\r\n")[1:]]
             content_length = None
             for tup in headers:
                 key, val = tup
