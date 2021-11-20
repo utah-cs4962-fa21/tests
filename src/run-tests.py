@@ -6,6 +6,7 @@ import doctest
 import os
 import sys
 import re
+import io
 
 sys.path.append(os.getcwd())
 
@@ -79,12 +80,81 @@ CURRENT_TESTS["all"] = all_tests
 
 CURRENT_TESTS.update(specific_file_tests)
 
+def patched_failure_header(self, test, example):
+    out = [self.DIVIDER]
+    if test.filename:
+        if test.lineno is not None and example.lineno is not None:
+            lineno = test.lineno + example.lineno + 1
+        else:
+            lineno = '?'
+        out.append('File "%s", line %s, in %s' %
+                   (test.filename, lineno, test.name))
+    else:
+        out.append('Line %s, in %s' % (example.lineno+1, test.name))
+
+    example_idx = test._parsed.index(example)
+    header_idx = example_idx
+    while header_idx > 0 \
+          and (isinstance(test._parsed[header_idx], doctest.Example)
+               or test._parsed[header_idx] == ''):
+        header_idx -= 1
+    s = ""
+    for i in range(header_idx, example_idx + 1):
+        x = test._parsed[i]
+        if isinstance(x, str):
+            s += x
+        else:
+            s += "    >>> " + x.source
+            if x.want:
+                s += "    " + x.want[:-1].replace("\n", "\n    ") + "\n"
+    out.append(doctest._indent(s))
+    return '\n'.join(out) + "\n"
+
+def patched_report_unexpected_exception(self, out, test, example, exc_info):
+    """
+    Patch the doctest printer to print output when exceptions occur
+    """
+    got = self._fakeout._old_getvalue
+    out(self._failure_header(test, example) +
+        self._checker.output_difference(example, got, self.optionflags) +
+        'Exception Raised:\n' + doctest._indent(doctest._exception_traceback(exc_info)))
+    
+old_truncate = doctest._SpoofOut.truncate
+
+def patched_truncate(self, size=None):
+    """
+    Patch the fake doctest stdout to save the output long enough to use it when reporting errors
+    """
+    self._old_getvalue = self.getvalue()
+    old_truncate(self, size)
+    
+old_parse = doctest.DocTestParser.parse
+
+def patched_parse(self, string, name="<string>"):
+    output = old_parse(self, string, name)
+    self._parsed = output
+    return output
+
+old_get_doctest = doctest.DocTestParser.get_doctest
+
+def patched_get_doctest(self, string, globs, name, filename, lineno):
+    out = old_get_doctest(self, string, globs, name, filename, lineno)
+    out._parsed = self._parsed
+    return out
+
+def patch_doctest():
+    doctest.DocTestRunner.report_unexpected_exception = patched_report_unexpected_exception
+    doctest.DocTestRunner._failure_header = patched_failure_header
+    doctest._SpoofOut.truncate = patched_truncate
+    doctest.DocTestParser.parse = patched_parse
+    doctest.DocTestParser.get_doctest = patched_get_doctest
 
 def run_doctests(files):
+    patch_doctest()
     mapped_results = dict()
     for fname in files:
-        mapped_results[fname] = doctest.testfile(fname,
-                                                 optionflags=doctest.ELLIPSIS)
+        mapped_results[fname] = doctest.testfile(
+            fname, optionflags=doctest.ELLIPSIS | doctest.REPORT_ONLY_FIRST_FAILURE)
     return mapped_results
 
 def parse_arguments(argv):
