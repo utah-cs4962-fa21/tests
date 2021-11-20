@@ -80,7 +80,64 @@ CURRENT_TESTS["all"] = all_tests
 
 CURRENT_TESTS.update(specific_file_tests)
 
+# Below this are a variety of "fixes" to doctest that make it more user-friendly
+
+old_truncate = doctest._SpoofOut.truncate
+
+def patched_truncate(self, size=None):
+    """
+    Patch the fake doctest stdout to save the output long enough to use when reporting errors
+    """
+    self._old_getvalue = self.getvalue()
+    old_truncate(self, size)
+
+def patched_report_unexpected_exception(self, out, test, example, exc_info):
+    """
+    Patch the doctest printer to print output when exceptions occur.
+
+    Note that this uses the _old_getvalue saved above, which doctest otherwise throws out
+    when exceptions are thrown.
+    """
+    got = self._fakeout._old_getvalue
+    out(self._failure_header(test, example) +
+        self._checker.output_difference(example, got, self.optionflags) +
+        'Exception Raised:\n' + doctest._indent(doctest._exception_traceback(exc_info)))
+    
+old_parse = doctest.DocTestParser.parse
+
+def patched_parse(self, string, name="<string>"):
+    """
+    Save the text introducing each example to the parser object, so
+    that we can use it in the _failure_header.
+    """
+    output = old_parse(self, string, name)
+    self._parsed = output
+    return output
+
+old_get_doctest = doctest.DocTestParser.get_doctest
+
+def patched_get_doctest(self, string, globs, name, filename, lineno):
+    """
+    Copy the text introducing each example from the parser object to
+    the doctest object, so that we can use it in the _failure_header.
+    """
+    out = old_get_doctest(self, string, globs, name, filename, lineno)
+    out._parsed = self._parsed
+    return out
+
 def patched_failure_header(self, test, example):
+    """
+    Print the full block being executed, including the text
+    introducing the block and going up to the failing example, any
+    time a failure occurs.
+
+    To do so, we make use of the _parsed field on the doctest object,
+    which saves the complete parsed doctest file. In it, we find the
+    example that failed, and walk backward until we find a non-empty
+    piece of explanatory text. That starts a block, and we output it
+    in faux-markdown style until we get to the example that failed.
+    """
+
     out = [self.DIVIDER]
     if test.filename:
         if test.lineno is not None and example.lineno is not None:
@@ -104,43 +161,11 @@ def patched_failure_header(self, test, example):
         if isinstance(x, str):
             s += x
         else:
-            s += "    >>> " + x.source
+            s += ">>> " + x.source
             if x.want:
-                s += "    " + x.want[:-1].replace("\n", "\n    ") + "\n"
+                s += x.want
     out.append(doctest._indent(s))
     return '\n'.join(out) + "\n"
-
-def patched_report_unexpected_exception(self, out, test, example, exc_info):
-    """
-    Patch the doctest printer to print output when exceptions occur
-    """
-    got = self._fakeout._old_getvalue
-    out(self._failure_header(test, example) +
-        self._checker.output_difference(example, got, self.optionflags) +
-        'Exception Raised:\n' + doctest._indent(doctest._exception_traceback(exc_info)))
-    
-old_truncate = doctest._SpoofOut.truncate
-
-def patched_truncate(self, size=None):
-    """
-    Patch the fake doctest stdout to save the output long enough to use it when reporting errors
-    """
-    self._old_getvalue = self.getvalue()
-    old_truncate(self, size)
-    
-old_parse = doctest.DocTestParser.parse
-
-def patched_parse(self, string, name="<string>"):
-    output = old_parse(self, string, name)
-    self._parsed = output
-    return output
-
-old_get_doctest = doctest.DocTestParser.get_doctest
-
-def patched_get_doctest(self, string, globs, name, filename, lineno):
-    out = old_get_doctest(self, string, globs, name, filename, lineno)
-    out._parsed = self._parsed
-    return out
 
 def patch_doctest():
     doctest.DocTestRunner.report_unexpected_exception = patched_report_unexpected_exception
