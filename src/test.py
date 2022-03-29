@@ -7,14 +7,14 @@ import io
 import sys
 import tkinter
 import tkinter.font
-import unittest
 import email
 import os
 from unittest import mock
+from ssl import SSLCertVerificationError
 
 
 def normalize_display_list(dl):
-    dl = [(float(t[0]), float(t[1]), t[2].replace("\xad", ""),  *t[3:]) for t in dl]
+    dl = [(float(t[0]), float(t[1]), t[2].replace("\xad", ""), *t[3:]) for t in dl]
     return dl
 
 class certifi:
@@ -24,7 +24,6 @@ class certifi:
 sys.modules["certifi"] = certifi()
 
 
-from ssl import SSLCertVerificationError
 def fake_badssl(hostname):
     if hostname.endswith(".badssl.com"):
         raise SSLCertVerificationError()
@@ -52,7 +51,7 @@ class socket:
     def connect(self, host_port):
         self.host, self.port = host_port
         self.connected = True
-        if self.ssl_hostname != None:
+        if self.ssl_hostname is not None:
             assert self.ssl_hostname == self.host
             fake_badssl(self.host)
             self.scheme = "https"
@@ -72,11 +71,12 @@ class socket:
                 key, val = tup
                 if key.lower() == "content-length":
                     content_length = val.strip()
-            assert content_length != None, "Content-Length not present in headers"
+            assert content_length is not None, "Content-Length not present in headers"
             assert len(self.body) == int(content_length), len(self.body)
 
     def makefile(self, mode, encoding, newline):
-        assert self.connected and self.host and self.port, "You cannot call makefile() on a socket until you call connect() and send()"
+        assert self.connected and self.host and self.port, \
+            "You cannot call makefile() on a socket until you call connect() and send()"
         if self.port == 80 and self.scheme == "http":
             url = self.scheme + "://" + self.host + self.path
         elif self.port == 443 and self.scheme == "https":
@@ -90,7 +90,8 @@ class socket:
                         "Incorrect GET form submisson")
             return io.StringIO(response.replace(newline, "\n"), newline)
         assert url in self.URLs, f"You are requesting a url that you shouldn't: {url}"
-        assert self.method == self.URLs[url][0], f"Expected a {self.URLs[url][0]} request but got a {self.method} request to {url}"
+        assert self.method == self.URLs[url][0], \
+            f"Expected a {self.URLs[url][0]} request but got a {self.method} request to {url}"
         output = self.URLs[url][1]
         if self.URLs[url][2]:
             assert self.body == self.URLs[url][2], (self.body, self.URLs[url][2])
@@ -106,8 +107,8 @@ class socket:
     @classmethod
     def respond(cls, url, response, method="GET", body=None):
         if NO_CACHE:
-            respone = response.replace(b"\r\n\r\n",
-                                       b"\r\nCache-Control: no-store\r\n\r\n")
+            response = response.replace(b"\r\n\r\n",
+                                        b"\r\nCache-Control: no-store\r\n\r\n")
         cls.URLs[url] = [method, response, body]
 
     @classmethod
@@ -150,7 +151,7 @@ class socket:
         raw_command, raw_headers = raw_request.split('\r\n', 1)
         message = email.message_from_file(io.StringIO(raw_headers))
         headers = dict(message.items())
-        headers = {key.lower(): val for key,val in headers.items()}
+        headers = {key.lower(): val for key, val in headers.items()}
         command, path, version = raw_command.split(" ", 2)
         return command, path, version, headers
 
@@ -192,7 +193,6 @@ class ssl:
     def patch(cls):
         _ = mock.patch("ssl.SSLContext", wraps=cls).start()
         return mock.patch("ssl.create_default_context", wraps=cls)
-
 
 
 class SilentTk:
@@ -253,10 +253,10 @@ def check_bookmark_button(fill_color):
         fill = parts[6].split("=")[1][1:-1]
 
         if (755 < x1 < 775 and
-            40 < y1 < 60 and
-            780 < x2 < 800 and
-            80 < y2 < 100 and
-            fill == fill_color):
+           40 < y1 < 60 and
+           780 < x2 < 800 and
+           80 < y2 < 100 and
+           fill == fill_color):
             return True
 
     return False
@@ -319,12 +319,10 @@ class SkipChromeCanvas:
             print("create_text: x={} y={} text={}".format(
                 x, y, text))
 
-
     def create_rectangle(self, x1, y1, x2, y2, width=None, fill=None, outline=None):
         if y1 > 100 and fill != "blue":
             print("create_rectangle: x1={} y1={} x2={} y2={} width={} fill={}".format(
                 x1, y1, x2, y2, width, repr(fill)))
-
 
     def create_line(self, x1, y1, x2, y2, fill=None):
         pass
@@ -394,8 +392,8 @@ class MockFont:
         return self.size * len(word.replace("\xad", ""))
 
     def metrics(self, name=None):
-        all = {"ascent" : self.size * 0.75, "descent": self.size * 0.25,
-            "linespace": self.size}
+        all = {"ascent": self.size * 0.75, "descent": self.size * 0.25,
+               "linespace": self.size}
         if name:
             return all[name]
         return all
@@ -426,7 +424,7 @@ tkinter.font.Font = MockFont
 def errors(f, *args, **kwargs):
     try:
         f(*args, **kwargs)
-    except Exception as e:
+    except Exception:
         return True
     else:
         return False
