@@ -20,16 +20,13 @@ ordinary `<nav>` nodes don't have any special styling. You should be
 able to pass with without any changes to the base browser.
 
     >>> nodes = browser.HTMLParser("""<!doctype html>
-    ... <nav>A</nav>
-    ... <p>B</p>
-    ... """).parse()
+    ... <nav>A</nav>B""").parse()
     >>> browser.print_tree(nodes)
      <html>
        <body>
          <nav>
            'A'
-         <p>
-           'B'
+         'B'
     >>> doc = browser.DocumentLayout(nodes)
     >>> doc.layout()
     >>> browser.print_tree(doc)
@@ -47,16 +44,13 @@ able to pass with without any changes to the base browser.
 Next, let's test that a proper links bar has a `lightgray` background:
 
     >>> nodes = browser.HTMLParser("""<!doctype html>
-    ... <nav class="links">A</nav>
-    ... <p>B</p>
-    ... """).parse()
+    ... <nav class="links">A</nav>B""").parse()
     >>> browser.print_tree(nodes)
      <html>
        <body>
          <nav class="links">
            'A'
-         <p>
-           'B'
+         'B'
     >>> doc = browser.DocumentLayout(nodes)
     >>> doc.layout()
     >>> browser.print_tree(doc)
@@ -79,7 +73,7 @@ syntaxes the same.
 
     >>> nodes = browser.HTMLParser("""<!doctype html>
     ... <nav class="links">A</nav>
-    ... <p>B</p>
+    ... B
     ... <nav class=links>C</nav>
     ... """).parse()
     >>> browser.print_tree(nodes)
@@ -87,8 +81,7 @@ syntaxes the same.
        <body>
          <nav class="links">
            'A'
-         <p>
-           'B'
+         '\nB\n'
          <nav class="links">
            'C'
     >>> doc = browser.DocumentLayout(nodes)
@@ -119,8 +112,7 @@ very narrow browsers (like on mobile).
 
     >>> nodes = browser.HTMLParser("""<!doctype html>
     ... <nav class="links">A<br>C</nav>
-    ... <p>B</p>
-    ... """).parse()
+    ... B""").parse()
     >>> browser.print_tree(nodes)
      <html>
        <body>
@@ -128,8 +120,7 @@ very narrow browsers (like on mobile).
            'A'
            <br>
            'C'
-         <p>
-           'B'
+         '\nB'
     >>> doc = browser.DocumentLayout(nodes)
     >>> doc.layout()
     >>> browser.print_tree(doc)
