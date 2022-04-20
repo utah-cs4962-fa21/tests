@@ -9,6 +9,14 @@ HTML tags. This file contains tests for the additional functionality.
     >>> _ = test.ssl.patch().start()
     >>> import browser
 
+Override default values for `HSTEP`, `VSTEP`, `WIDTH`, and `HEIGHT` in case
+you have changed them to make your browser look good on your machine.
+
+    >>> browser.HSTEP = 13
+    >>> browser.VSTEP = 18
+    >>> browser.WIDTH = 800
+    >>> browser.HEIGHT = 600
+
 Testing `lex`
 -------------
 
