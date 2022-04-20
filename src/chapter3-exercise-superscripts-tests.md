@@ -12,6 +12,14 @@ Testing boilerplate:
     ...   dl = browser.Layout(browser.lex(text)).display_list
     ...   return test.normalize_display_list(dl)
 
+Override default values for `HSTEP`, `VSTEP`, `WIDTH`, and `HEIGHT` in case
+you have changed them to make your browser look good on your machine.
+
+    >>> browser.HSTEP = 13
+    >>> browser.VSTEP = 18
+    >>> browser.WIDTH = 800
+    >>> browser.HEIGHT = 600
+
 A superscript should have half the normal font size and be aligned to the top 
   of other text on the line.
 

@@ -12,6 +12,14 @@ Testing boilerplate:
     ...   dl = browser.Layout(browser.lex(text)).display_list
     ...   return test.normalize_display_list(dl)
 
+Override default values for `HSTEP`, `VSTEP`, `WIDTH`, and `HEIGHT` in case
+you have changed them to make your browser look good on your machine.
+
+    >>> browser.HSTEP = 13
+    >>> browser.VSTEP = 18
+    >>> browser.WIDTH = 800
+    >>> browser.HEIGHT = 600
+
 The headers mentioned in the exercise description are centered due to CSS, 
   which is the subject of chapter 6.
 For now we will just center text inside any `h1 class="title"` tag.
