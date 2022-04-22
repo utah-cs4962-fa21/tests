@@ -24,6 +24,14 @@ The implicit ``html` and `body` (and `head` when needed) tags are added:
 	   <body>
 	     'test'
 
+Quotation marks around `Text` objects should be different depending on if
+there are quotes within:
+
+	>>> test_parse("<html><body>baker's dozen</body></html>")
+	 <html>
+	   <body>
+	     "baker's dozen"
+
 Missing tags are added in:
 
 	>>> test_parse("test")
